@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router';
 import { AuthContext } from '../Contexts/AuthContext';
-import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from './mode-toggle';
 import {
@@ -17,7 +16,7 @@ const Navbar = () => {
     const { user, LogOut } = useContext(AuthContext);
 
     const navLinks = <>
-        <NavLink NavLink to={'/'} > Home</NavLink>
+        <NavLink to={'/'} > Home</NavLink>
         <NavLink to={'/addTransaction'}>Add Transaction</NavLink>
         <NavLink to={'/myTransaction'}>My Transactions</NavLink>
         <NavLink to={'/reports'}>Reports</NavLink>
@@ -32,7 +31,7 @@ const Navbar = () => {
                 <ul className="menu menu-horizontal space-x-4 font-semibold">
                     {
                         navLinks
-                    }
+                }
                 </ul>
             </div>
             {/* drop */}
@@ -51,16 +50,16 @@ const Navbar = () => {
             </div>
 
             <div className="">
-                <div className='flex space-x-2'>
+                <div className='flex gap-3'>
                     <ModeToggle></ModeToggle>
                     {
-                        user ? <div className=''>
+                        user ? <div className=' space-x-2.5'>
                             <DropdownMenu>
                                 <DropdownMenuTrigger>Open</DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                                    <DropdownMenuItem><Link to={'/myProfile'}>My Profile</Link></DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <Button onClick={LogOut} className="btn shadow-none ">LogOut</Button>

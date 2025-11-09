@@ -3,11 +3,13 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import { Button } from "@/components/ui/button"
 import { Link, useLocation, useNavigate } from "react-router";
 import FormInput from "../../Components/FormInput";
+import toast from "react-hot-toast";
 
 const Login = () => {
-    const { GoogleLogin, signUp, setUser } = useContext(AuthContext);
+    const { GoogleLogin, LogIn, setUser, setLoading } = useContext(AuthContext);
 
-    const navigate = useNavigate();
+
+    const navigate = useNavigate()
     const location = useLocation();
 
     const handleSubmit = (e) => {
@@ -15,21 +17,26 @@ const Login = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
 
-        signUp(email, password)
+        LogIn(email, password)
             .then((res) => {
                 setUser(res.user);
-                navigate(location.state || "/");
+                toast.success("logged in")
+                navigate(`${location.state ? location.state : '/'}`);
             })
-            .catch((err) => alert(err));
+            .catch((err) => toast(err))
+            .finaly(() => {
+                setLoading(false)
+            })
     };
 
     const handleGoogleLogin = () => {
         GoogleLogin()
             .then((res) => {
                 setUser(res.user);
+                toast.success("done")
                 navigate(location.state || "/");
             })
-            .catch((err) => alert(err.message));
+            .catch((error) => toast.error(error));
     };
 
     return (

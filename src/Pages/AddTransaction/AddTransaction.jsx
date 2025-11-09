@@ -7,7 +7,7 @@ const AddTransaction = () => {
     <div className="min-h-screen">
       <div className="container mx-auto max-w-2xl p-4 md:p-8">
         <div className=" p-8 rounded-xl shadow-2xl">
-          <h2 className="text-3xl font-bold text-center mb-8">
+          <h2 className="text-xl md:text-4xl font-bold text-center mb-8">
             Add a New Transaction
           </h2>
           <form className="space-y-6">
