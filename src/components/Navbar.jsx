@@ -28,7 +28,7 @@ const Navbar = () => {
 
 
     return (
-        <div className="flex justify-between items-center w-full bg-white/10 border  p-2  ">
+        <div className=" w-full flex justify-between items-center  bg-white/10 border  p-2  ">
             <div className="hidden lg:flex">
                 <a className=" text-xl">Fin-EASY</a>
             </div>
