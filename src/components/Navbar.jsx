@@ -23,10 +23,6 @@ const Navbar = () => {
         <NavLink to={'/reports'}>Reports</NavLink>
     </>
 
-
-
-
-
     return (
         <div className=" w-full flex justify-between items-center  bg-white/10 border  p-2  ">
             <div className="hidden lg:flex">

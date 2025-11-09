@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Error from "../Pages/Error/Error";
+import AddTransaction from "../Pages/AddTransaction/AddTransaction";
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
             {
                 path: '/signup',
                 element: <Register></Register>
+            },
+            {
+                path: '/addTransaction',
+                element: <AddTransaction></AddTransaction>,
             }
         ]
     },

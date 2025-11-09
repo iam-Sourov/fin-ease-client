@@ -6,9 +6,7 @@ import React from 'react';
 const Overview = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-           
             <div className=" grid  grid-cols-1 md:grid-cols-3 place-items-center gap-6 -mt-16">
-                {/* Card 1: Total Balance */}
                 <div class="w-80 h-48 p-6 bg-linear-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
                     <div class="flex justify-between items-start">
                         <div class="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner">
@@ -24,7 +22,6 @@ const Overview = () => {
                         <div class="text-lg font-medium">Total Balance</div>
                     </div>
                 </div>
-
                 <div class="w-80 h-48 p-6 bg-linear-to-br from-green-500 to-green-700 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
                     <div class="flex justify-between items-start">
                         <div class="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner">
