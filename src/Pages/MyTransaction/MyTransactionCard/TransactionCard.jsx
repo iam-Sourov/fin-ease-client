@@ -3,7 +3,6 @@ import { Pencil, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/ui/spinner"
 import axios from 'axios';
 import {
   Dialog,
@@ -16,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { AuthContext } from '../../../Contexts/AuthContext';
-
+import toast from 'react-hot-toast';
 
 
 const TransactionCard = () => {
@@ -24,7 +23,17 @@ const TransactionCard = () => {
   const email = user.email;
   const [transactions, setTransactions] = useState([]);
 
-  
+  const handleRemove = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/transaction/delete/${id}`);
+      const filteredData = transactions.filter(data => data._id !== id);
+      setTransactions(filteredData);
+      toast.success('Successfully Deleted')
+    } catch (err) {
+      console.log(err);
+      toast.error('Unable To Delete')
+    }
+  }
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -32,15 +41,14 @@ const TransactionCard = () => {
         const res = await axios.get(`http://localhost:3000/my-transactions?email=${email}`);
         setTransactions(res.data);
       } catch (err) {
-        console.error("Error fetching transactions:", err);
+        console.log(err);
+        toast.error("Error Fetching Transactions");
       } finally {
         setLoading(false);
       }
     };
     fetchTransactions();
-  }, [email]);
-
-
+  }, [email, setTransactions, setLoading]);
   return (
     <div className="p-2">
       <div className="max-w-6xl mx-auto">
@@ -58,54 +66,71 @@ const TransactionCard = () => {
                 <th className="p-3 border-b text-center whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {transactions?.map((data) => (
                 <tr
                   key={data._id}
-                  className=" transition-colors duration-200 border-b"
-                >
+                  className=" transition-colors duration-200 border-b">
                   <td className="p-3 whitespace-nowrap">{data.type}</td>
                   <td className="p-3 whitespace-nowrap">{data.category}</td>
                   <td
-                    className={`p-3 whitespace-nowrap font-medium ${data.type === "Expense" ? "text-red-600" : "text-green-600"
-                      }`}
-                  >
+                    className={`p-3 whitespace-nowrap font-medium ${data.type === "expense" ? "text-red-600" : "text-green-600"}`}>
                     ${data.amount}
                   </td>
                   <td className="p-3 whitespace-nowrap">
                     {new Date(data.date).toLocaleDateString()}
                   </td>
-
                   <td className="p-3 whitespace-nowrap text-center flex flex-wrap justify-center gap-2">
-                    {/* --- Update Dialog --- */}
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button className="inline-flex items-center px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
                           <Pencil size={16} className="mr-1" /> Update
                         </Button>
                       </DialogTrigger>
-
                       <DialogContent className="sm:max-w-[450px]">
-                        <form>
+                        <form
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            const form = e.target;
+                            const type = form.type.value;
+                            const description = form.description.value;
+                            const category = form.category.value;
+                            const amount = parseFloat(form.amount.value);
+                            const date = form.date.value;
+                            const updatedTransaction = {
+                              type: type,
+                              description: description,
+                              category: category,
+                              amount: amount,
+                              date: date
+                            };
+                            try {
+                              const res = await axios.put(
+                                `http://localhost:3000/transactions/update/${data._id}`, updatedTransaction);
+                              if (res.data.modifiedCount > 0) {
+                                toast.success("Transaction updated successfully!");
+                                const updatedList = transactions.map(item =>
+                                  item._id === data._id ? { ...item, ...updatedTransaction } : item);
+                                setTransactions(updatedList);
+                              } else {
+                                toast("No changes made.");
+                              }
+                            } catch (err) {
+                              console.error(err);
+                              toast.error("Error updating transaction.");
+                            }
+                          }}>
                           <DialogHeader>
                             <DialogTitle>Update Transaction</DialogTitle>
                             <DialogDescription>
-                              Edit the transaction details below. Click save when
-                              you're done.
+                              Edit the transaction details below. Click save when you're done.
                             </DialogDescription>
                           </DialogHeader>
 
                           <div className="grid gap-4 py-2">
                             <div className="grid gap-2">
                               <Label htmlFor="type">Type</Label>
-                              <Input
-                                id="type"
-                                name="type"
-                                defaultValue={data.type}
-                                placeholder="Income or Expense"
-                                required
-                              />
+                              <Input id="type" name="type" defaultValue={data.type} required />
                             </div>
 
                             <div className="grid gap-2">
@@ -114,7 +139,6 @@ const TransactionCard = () => {
                                 id="description"
                                 name="description"
                                 defaultValue={data.description}
-                                placeholder="Transaction details"
                                 required
                               />
                             </div>
@@ -125,7 +149,6 @@ const TransactionCard = () => {
                                 id="category"
                                 name="category"
                                 defaultValue={data.category}
-                                placeholder="e.g., Food, Rent, Salary"
                                 required
                               />
                             </div>
@@ -137,7 +160,6 @@ const TransactionCard = () => {
                                 name="amount"
                                 type="number"
                                 defaultValue={data.amount}
-                                placeholder="Enter amount"
                                 required
                               />
                             </div>
@@ -148,7 +170,7 @@ const TransactionCard = () => {
                                 id="date"
                                 name="date"
                                 type="date"
-                                defaultValue={data.date}
+                                defaultValue={data.date?.split("T")[0]}
                                 required
                               />
                             </div>
@@ -161,10 +183,7 @@ const TransactionCard = () => {
                               </Button>
                             </DialogClose>
                             <DialogClose asChild>
-                              <Button
-                                type="submit"
-                                className="bg-blue-600 text-white hover:bg-blue-700"
-                              >
+                              <Button type="submit" className="bg-blue-600 text-white hover:bg-blue-700">
                                 Save changes
                               </Button>
                             </DialogClose>
@@ -195,7 +214,7 @@ const TransactionCard = () => {
                             <Button variant="outline">Cancel</Button>
                           </DialogClose>
                           <DialogClose asChild>
-                            <Button className="bg-red-600 text-white hover:bg-red-700">
+                            <Button onClick={() => handleRemove(data._id)} className="bg-red-600 text-white hover:bg-red-700">
                               Confirm Delete
                             </Button>
                           </DialogClose>
@@ -207,7 +226,7 @@ const TransactionCard = () => {
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button className="inline-flex items-center px-2 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">
-                          <Eye size={16} className="mr-1" /> View
+                          <Eye size={16} className="mr-1" /> Details
                         </Button>
                       </DialogTrigger>
 
@@ -224,34 +243,29 @@ const TransactionCard = () => {
                         <div className="mt-4 grid gap-4 text-sm">
                           <div className="flex justify-between">
                             <span className="font-medium">Type:</span>
-                            <span>{data.type || "N/A"}</span>
+                            <span>{data.type}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Description:</span>
-                            <span>{data.description || "N/A"}</span>
+                            <span>{data.description}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Category:</span>
-                            <span>{data.category || "N/A"}</span>
+                            <span>{data.category}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Amount:</span>
-                            <span>${data.amount || "0.00"}</span>
+                            <span>${data.amount}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Date:</span>
                             <span>
-                              {data.date ? new Date(data.date).toLocaleDateString() : "N/A"}
+                              {new Date(data.date).toLocaleDateString()}
                             </span>
                           </div>
-                          <div className="flex justify-between border-t pt-3 mt-2">
-                            <span className="font-semibold">Total in Category:</span>
-                            <span className="font-bold text-blue-700">
-                              ${data.totalCategoryAmount || "0.00"}
-                            </span>
+                          <div className="flex justify-between border-t ">
                           </div>
                         </div>
-
                         <DialogFooter className="mt-6">
                           <DialogClose asChild>
                             <Button variant="outline" className="w-full">

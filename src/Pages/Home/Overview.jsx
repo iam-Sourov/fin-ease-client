@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 
 const Overview = () => {
 
-    const { user, loading, setloading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
+    const { user, setloading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
     const email = user.email;
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Overview = () => {
                     .reduce((sum, exp) => sum + Number(exp.amount), 0);
                 setIncome(totalIncome);
                 setExpense(totalExpence);
-                setBalance(totalExpence - totalExpence);
+                setBalance(totalIncome - totalExpence);
             } catch (error) {
                 toast.error(error)
             } finally {
@@ -33,6 +33,7 @@ const Overview = () => {
         };
         fetchTransactions();
     }, [email, setIncome, setExpense, setBalance, setloading]);
+
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className=" grid  grid-cols-1 md:grid-cols-3 place-items-center gap-6 -mt-16">
@@ -46,9 +47,9 @@ const Overview = () => {
                     <div className="text-2xl font-mono tracking-wide">
                         $ {balance.toLocaleString()}
                     </div>
-                    <div>
+                    <div className='space-y-2'>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
-                        <div className="text-lg font-medium">Total Balance</div>
+                        <div className="text-xl font-medium">Total Balance</div>
                     </div>
                 </div>
                 <div className="w-80 h-48 p-6 bg-linear-to-br from-green-500 to-green-700 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
@@ -61,9 +62,9 @@ const Overview = () => {
                     <div className="text-2xl font-mono tracking-wide">
                         $ {income.toLocaleString()}
                     </div>
-                    <div>
+                    <div className='space-y-2'>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
-                        <div className="text-lg font-medium">Total Income</div>
+                        <div className="text-xl font-medium">Total Income</div>
                     </div>
                 </div>
                 <div className="w-80 h-48 p-6 bg-linear-to-br from-red-500 to-red-700 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
@@ -74,11 +75,11 @@ const Overview = () => {
                         <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
                     </div>
                     <div className="text-2xl font-mono tracking-wide">
-                        $ {expense}
+                        $ {expense.toLocaleString()}
                     </div>
-                    <div>
+                    <div className='space-y-2'>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
-                        <div className="text-lg font-medium">Total Expenses</div>
+                        <div className="text-xl font-medium">Total Expenses</div>
                     </div>
                 </div>
             </div>
