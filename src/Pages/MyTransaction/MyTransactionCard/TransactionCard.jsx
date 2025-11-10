@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Pencil, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
+import axios from 'axios';
 import {
   Dialog,
   DialogContent,
@@ -13,24 +15,30 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { AuthContext } from '../../../Contexts/AuthContext';
+
+
 
 const TransactionCard = () => {
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      type: "Income",
-      category: "Freelancing",
-      amount: 250,
-      date: "2025-11-09",
-    },
-    {
-      id: 2,
-      type: "Expense",
-      category: "Groceries",
-      amount: 80,
-      date: "2025-11-08",
-    },
-  ]);
+  const { user, setLoading } = useContext(AuthContext);
+  const email = user.email;
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/my-transactions?email=${email}`);
+        setTransactions(res.data);
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTransactions();
+  }, [email]);
+
+
   return (
     <div className="p-2">
       <div className="max-w-6xl mx-auto">
