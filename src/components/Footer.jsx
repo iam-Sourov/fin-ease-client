@@ -1,3 +1,5 @@
+import { Facebook, Instagram, Linkedin } from 'lucide-react';
+import { RiTwitterXLine } from "react-icons/ri";
 import React from 'react';
 
 const Footer = () => {
@@ -16,26 +18,26 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold mb-3">Contact Us</h3>
                         <ul className="space-y-1 text-sm ">
-                            <li>Email: </li>
-                            <li>Phone: </li>
-                            <li>Address: </li>
+                            <li>Email: mailMe@gmail.com</li>
+                            <li>Phone: 01679------</li>
+                            <li>Address: NarayanGanj</li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="text-lg font-semibold mb-3">Follow Us</h3>
                         <div className="flex justify-center md:justify-start space-x-4">
-                            {/* <a  aria-label="Facebook" className="text-2xl hover:text-blue-400 transition-colors">
-                                <FaFacebook />
+                            <a aria-label="Facebook" className="text-2xl hover:text-blue-400 transition-colors">
+                                <Facebook />
                             </a>
-                            <a  aria-label="Twitter" className="text-2xl hover:text-black transition-colors">
-                                <FaXTwitter />
+                            <a aria-label="Twitter" className="text-2xl transition-colors">
+                                <RiTwitterXLine />
                             </a>
-                            <a  aria-label="Instagram" className="text-2xl hover:text-pink-400 transition-colors">
-                                <FaInstagram />
+                            <a aria-label="Instagram" className="text-2xl hover:text-pink-400 transition-colors">
+                                <Instagram />
                             </a>
-                            <a  aria-label="LinkedIn" className="text-2xl hover:text-blue-500 transition-colors">
-                                <FaLinkedin />
-                            </a> */}
+                            <a aria-label="LinkedIn" className="text-2xl hover:text-blue-500 transition-colors">
+                                <Linkedin />
+                            </a>
                         </div>
                     </div>
                 </div>

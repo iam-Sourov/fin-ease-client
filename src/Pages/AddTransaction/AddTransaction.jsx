@@ -1,8 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from "@/components/ui/button"
+import { AuthContext } from '../../Contexts/AuthContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
 
 
 const AddTransaction = () => {
+  const { user } = useContext(AuthContext);
+
+  const handleAddToTransaction = async (e) => {
+    e.preventDefault()
+    const form = e.target;
+    console.log(form);
+    const transactionType = form.transactionType.value;
+    const category = form.category.value;
+    const amount = parseFloat(form.amount.value);
+    const description = form.description.value;
+    const date = form.date.value;
+    const email = form.email.value;
+    const name = form.name.value;
+    const newTransaction = {
+      type: transactionType,
+      category: category,
+      amount: amount,
+      description: description,
+      date: date,
+      email: email,
+      name: name
+    }
+    try {
+      await axios.post("http://localhost:3000/add-Transaction", newTransaction);
+      toast.success('Successfully Added A Transaction')
+      
+    } catch (err) {
+      console.log(err)
+      toast.error("Failed To Add Transaction")
+    }
+  }
   return (
     <div className="min-h-screen">
       <div className="container mx-auto max-w-2xl p-4 md:p-8">
@@ -10,7 +45,7 @@ const AddTransaction = () => {
           <h2 className="text-xl md:text-4xl font-bold text-center mb-8">
             Add a New Transaction
           </h2>
-          <form className="space-y-6">
+          <form onSubmit={handleAddToTransaction} className="space-y-6">
             <fieldset>
               <legend className="block mb-2 text-sm font-medium ">
                 Transaction Type
@@ -21,9 +56,7 @@ const AddTransaction = () => {
                     type="radio"
                     name="transactionType"
                     value="income"
-
-                    className="w-5 h-5 text-green-500  focus:ring-green-500"
-                  />
+                    className="w-5 h-5 text-green-500  focus:ring-green-500" />
                   <span className="text-green-400 font-medium">Income</span>
                 </label>
                 <label className="flex items-center space-x-2 cursor-pointer">
@@ -31,9 +64,7 @@ const AddTransaction = () => {
                     type="radio"
                     name="transactionType"
                     value="expense"
-
-                    className="w-5 h-5 text-red-500 focus:ring-red-500"
-                  />
+                    className="w-5 h-5 text-red-500 focus:ring-red-500" />
                   <span className="text-red-400 font-medium">Expense</span>
                 </label>
               </div>
@@ -44,6 +75,7 @@ const AddTransaction = () => {
               </label>
               <select
                 id="category"
+                name="category"
                 required
                 className="w-full bg-gray-400 p-3 rounded-md border  ">
                 <option value="" disabled>Select a category</option>
@@ -62,6 +94,7 @@ const AddTransaction = () => {
               <input
                 type="number"
                 id="amount"
+                name="amount"
                 placeholder="0.00"
                 step="0.01"
                 required
@@ -73,10 +106,11 @@ const AddTransaction = () => {
               </label>
               <textarea
                 id="description"
+                name="description"
                 rows="3"
                 placeholder="e.g., Weekly groceries at store"
-                className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
+                className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </textarea>
             </div>
             <div>
               <label htmlFor="date" className="block mb-2 text-sm font-medium ">
@@ -85,9 +119,9 @@ const AddTransaction = () => {
               <input
                 type="date"
                 id="date"
+                name="date"
                 required
-                className="w-full p-3   rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+                className="w-full p-3   rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -97,10 +131,10 @@ const AddTransaction = () => {
                 <input
                   type="text"
                   id="userName"
-                  value=''
+                  name="name"
+                  value={user.displayName}
                   readOnly
-                  className="w-full p-3   rounded-md border border-gray-500 cursor-not-allowed"
-                />
+                  className="w-full p-3   rounded-md border border-gray-500 cursor-not-allowed" />
               </div>
               <div>
                 <label htmlFor="userEmail" className="block mb-2 text-sm font-medium ">
@@ -109,10 +143,10 @@ const AddTransaction = () => {
                 <input
                   type="email"
                   id="userEmail"
-                  value=''
+                  name="email"
+                  value={user.email}
                   readOnly
-                  className="w-full p-3   rounded-md border border-gray-500 cursor-not-allowed"
-                />
+                  className="w-full p-3   rounded-md border border-gray-500 cursor-not-allowed" />
               </div>
             </div>
             <Button

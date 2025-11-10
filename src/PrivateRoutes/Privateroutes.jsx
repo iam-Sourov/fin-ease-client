@@ -8,8 +8,7 @@ import { AuthContext } from '../Contexts/AuthContext';
 const Privateroutes = ({ children }) => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
-  console.log(location);
-
+  
   if (user && user?.email) {
     return children;
   } else {

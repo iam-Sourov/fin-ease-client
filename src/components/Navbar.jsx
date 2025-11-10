@@ -25,7 +25,7 @@ const Navbar = () => {
     return (
         <div className=" w-full flex justify-between items-center  bg-white/10 border  p-2  ">
             <div className="hidden lg:flex">
-                <a className=" text-xl">Fin-EASY</a>
+                <a className=" text-xl">Fin-EASE</a>
             </div>
             <div className="hidden lg:flex ">
                 <ul className="menu menu-horizontal space-x-4 font-semibold">
