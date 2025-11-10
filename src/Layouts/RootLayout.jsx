@@ -9,11 +9,11 @@ import { Toaster } from 'react-hot-toast';
 const RootLayout = () => {
     const { loading } = useContext(AuthContext);
     if (loading) {
-        return <Spinner />
+        return <div className='w-full h-full grid place-items-center '><Spinner fullscreen /></div>
     }
     return (
         <div className='min-h-screen '>
-            <div><Toaster/></div>
+            <div><Toaster /></div>
             <header>
                 <Navbar></Navbar>
             </header>

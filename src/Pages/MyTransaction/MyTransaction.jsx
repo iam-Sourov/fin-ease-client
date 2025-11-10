@@ -4,7 +4,7 @@ import TransactionCard from './MyTransactionCard/TransactionCard';
 const MyTransaction = () => {
   return (
     <div>
-      <div className="w-full min-h-[40vh] flex items-center justify-center text-center px-4">
+      <div className="w-full min-h-[40vh] flex items-center justify-center text-center ">
         <div>
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight shadow-text">
             Take Control of Your Transactions.
