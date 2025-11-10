@@ -1,9 +1,38 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { AuthContext } from "../../Contexts/AuthContext";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 
 
 
 const Overview = () => {
+
+    const { user, loading, setloading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
+    const email = user.email;
+
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3000/my-transactions?email=${email}`);
+                const data = res.data;
+                const totalIncome = data
+                    .filter((inc) => inc.type === 'income')
+                    .reduce((sum, inc) => sum + Number(inc.amount), 0);
+                const totalExpence = data
+                    .filter((exp) => exp.type === 'expense')
+                    .reduce((sum, exp) => sum + Number(exp.amount), 0);
+                setIncome(totalIncome);
+                setExpense(totalExpence);
+                setBalance(totalExpence - totalExpence);
+            } catch (error) {
+                toast.error(error)
+            } finally {
+                setloading(false);
+            }
+        };
+        fetchTransactions();
+    }, [email, setIncome, setExpense, setBalance, setloading]);
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className=" grid  grid-cols-1 md:grid-cols-3 place-items-center gap-6 -mt-16">
@@ -15,7 +44,7 @@ const Overview = () => {
                         <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H7a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                     </div>
                     <div className="text-2xl font-mono tracking-wide">
-                        $ 1,234.56
+                        $ {balance.toLocaleString()}
                     </div>
                     <div>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
@@ -30,7 +59,7 @@ const Overview = () => {
                         <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
                     </div>
                     <div className="text-2xl font-mono tracking-wide">
-                        $ 5,678.90
+                        $ {income.toLocaleString()}
                     </div>
                     <div>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
@@ -45,7 +74,7 @@ const Overview = () => {
                         <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
                     </div>
                     <div className="text-2xl font-mono tracking-wide">
-                        $ 2,468.13
+                        $ {expense}
                     </div>
                     <div>
                         <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>

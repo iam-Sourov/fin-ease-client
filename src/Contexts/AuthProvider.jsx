@@ -6,6 +6,9 @@ import toast from 'react-hot-toast';
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [income, setIncome] = useState(0);
+    const [expense, setExpense] = useState(0);
+    const [balance, setBalance] = useState(0);
     const [loading, setLoading] = useState(true);
 
     const signUp = (email, password) => {
@@ -50,6 +53,12 @@ const AuthProvider = ({ children }) => {
         LogOut,
         GoogleLogin,
         updateUser,
+        income,
+        setIncome,
+        expense,
+        setExpense,
+        balance,
+        setBalance
     };
 
     return (

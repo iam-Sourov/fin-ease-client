@@ -24,6 +24,8 @@ const TransactionCard = () => {
   const email = user.email;
   const [transactions, setTransactions] = useState([]);
 
+  
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -58,21 +60,21 @@ const TransactionCard = () => {
             </thead>
 
             <tbody>
-              {transactions?.map((t) => (
+              {transactions?.map((data) => (
                 <tr
-                  key={t.id}
+                  key={data._id}
                   className=" transition-colors duration-200 border-b"
                 >
-                  <td className="p-3 whitespace-nowrap">{t.type}</td>
-                  <td className="p-3 whitespace-nowrap">{t.category}</td>
+                  <td className="p-3 whitespace-nowrap">{data.type}</td>
+                  <td className="p-3 whitespace-nowrap">{data.category}</td>
                   <td
-                    className={`p-3 whitespace-nowrap font-medium ${t.type === "Expense" ? "text-red-600" : "text-green-600"
+                    className={`p-3 whitespace-nowrap font-medium ${data.type === "Expense" ? "text-red-600" : "text-green-600"
                       }`}
                   >
-                    ${t.amount}
+                    ${data.amount}
                   </td>
                   <td className="p-3 whitespace-nowrap">
-                    {new Date(t.date).toLocaleDateString()}
+                    {new Date(data.date).toLocaleDateString()}
                   </td>
 
                   <td className="p-3 whitespace-nowrap text-center flex flex-wrap justify-center gap-2">
@@ -100,7 +102,7 @@ const TransactionCard = () => {
                               <Input
                                 id="type"
                                 name="type"
-                                defaultValue={t.type}
+                                defaultValue={data.type}
                                 placeholder="Income or Expense"
                                 required
                               />
@@ -111,7 +113,7 @@ const TransactionCard = () => {
                               <Input
                                 id="description"
                                 name="description"
-                                defaultValue={t.description}
+                                defaultValue={data.description}
                                 placeholder="Transaction details"
                                 required
                               />
@@ -122,7 +124,7 @@ const TransactionCard = () => {
                               <Input
                                 id="category"
                                 name="category"
-                                defaultValue={t.category}
+                                defaultValue={data.category}
                                 placeholder="e.g., Food, Rent, Salary"
                                 required
                               />
@@ -134,7 +136,7 @@ const TransactionCard = () => {
                                 id="amount"
                                 name="amount"
                                 type="number"
-                                defaultValue={t.amount}
+                                defaultValue={data.amount}
                                 placeholder="Enter amount"
                                 required
                               />
@@ -146,7 +148,7 @@ const TransactionCard = () => {
                                 id="date"
                                 name="date"
                                 type="date"
-                                defaultValue={t.date}
+                                defaultValue={data.date}
                                 required
                               />
                             </div>
@@ -222,30 +224,30 @@ const TransactionCard = () => {
                         <div className="mt-4 grid gap-4 text-sm">
                           <div className="flex justify-between">
                             <span className="font-medium">Type:</span>
-                            <span>{t.type || "N/A"}</span>
+                            <span>{data.type || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Description:</span>
-                            <span>{t.description || "N/A"}</span>
+                            <span>{data.description || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Category:</span>
-                            <span>{t.category || "N/A"}</span>
+                            <span>{data.category || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Amount:</span>
-                            <span>${t.amount || "0.00"}</span>
+                            <span>${data.amount || "0.00"}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="font-medium">Date:</span>
                             <span>
-                              {t.date ? new Date(t.date).toLocaleDateString() : "N/A"}
+                              {data.date ? new Date(data.date).toLocaleDateString() : "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between border-t pt-3 mt-2">
                             <span className="font-semibold">Total in Category:</span>
                             <span className="font-bold text-blue-700">
-                              ${t.totalCategoryAmount || "0.00"}
+                              ${data.totalCategoryAmount || "0.00"}
                             </span>
                           </div>
                         </div>
