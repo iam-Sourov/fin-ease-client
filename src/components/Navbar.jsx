@@ -11,6 +11,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Menu } from 'lucide-react';
 
 const Navbar = () => {
     const { user, LogOut } = useContext(AuthContext);
@@ -31,24 +32,22 @@ const Navbar = () => {
                 <ul className="menu menu-horizontal space-x-4 font-semibold">
                     {
                         navLinks
-                }
+                    }
                 </ul>
             </div>
-            {/* drop */}
+
             <div className='md:hidden block'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                    <DropdownMenuTrigger><Menu /></DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>Nav Links</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><NavLink NavLink to={'/'} > Home</NavLink></DropdownMenuItem>
+                        <DropdownMenuItem><NavLink to={'/'} > Home</NavLink></DropdownMenuItem>
                         <DropdownMenuItem><NavLink to={'/addTransaction'}>Add Transaction</NavLink></DropdownMenuItem>
                         <DropdownMenuItem><NavLink to={'/myTransaction'}>My Transactions</NavLink></DropdownMenuItem>
                         <DropdownMenuItem><NavLink to={'/reports'}>Reports</NavLink></DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-
             <div className="">
                 <div className='flex gap-3'>
                     <ModeToggle></ModeToggle>

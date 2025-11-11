@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
+import { Spinner } from "@/components/ui/spinner"
 import {
   PieChart,
   Pie,
@@ -11,61 +12,75 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+import { AuthContext } from "../../Contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const Reports = () => {
-
-  const transactions = [
-    { id: 1, type: "Income", category: "Freelancing", amount: 1200, date: "2025-01-15" },
-    { id: 2, type: "Expense", category: "Groceries", amount: 300, date: "2025-01-20" },
-    { id: 3, type: "Expense", category: "Transport", amount: 120, date: "2025-02-03" },
-    { id: 4, type: "Income", category: "Salary", amount: 2000, date: "2025-02-10" },
-    { id: 5, type: "Expense", category: "Entertainment", amount: 200, date: "2025-02-18" },
-    { id: 6, type: "Income", category: "Investments", amount: 800, date: "2025-03-05" },
-  ];
-
+  const { user, setLoading } = useContext(AuthContext);
+  const [transactions, setTransactions] = useState([]);
   const [monthFilter, setMonthFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
 
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/my-transactions?email=${user.email}`);
+        const data = await res.json();
+        setTransactions(data);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        toast.error('Error Fethcing Data')
+        setLoading(false);
+      }
+    };
+    fetchTransactions();
+  }, [user.email, setTransactions, setLoading]);
+
   const totalIncome = transactions
-    .filter((t) => t.type === "Income")
-    .reduce((sum, t) => sum + t.amount, 0);
+    .filter((inc) => inc.type === "income")
+    .reduce((sum, inc) => sum + inc.amount, 0);
+
   const totalExpense = transactions
-    .filter((t) => t.type === "Expense")
-    .reduce((sum, t) => sum + t.amount, 0);
+    .filter((exp) => exp.type === "expense")
+    .reduce((sum, exp) => sum + exp.amount, 0);
+
   const totalBalance = totalIncome - totalExpense;
 
-
   const filteredTransactions = useMemo(() => {
-    return transactions.filter((t) => {
-      const matchesMonth =
-        monthFilter === "All" ||
-        new Date(t.date).getMonth() + 1 === parseInt(monthFilter);
-      const matchesCategory =
-        categoryFilter === "All" || t.category === categoryFilter;
-      return matchesMonth && matchesCategory;
+    return transactions.filter((data) => {
+      const date = new Date(data.date);
+      const byMonth =
+        monthFilter === "All" || date.getMonth() + 1 === Number(monthFilter);
+      const byCategory =
+        categoryFilter === "All" || data.category === categoryFilter;
+      return byMonth && byCategory;
     });
   }, [transactions, monthFilter, categoryFilter]);
 
-  const categoryTotals = filteredTransactions.reduce((acc, t) => {
-    const key = t.category;
-    acc[key] = (acc[key] || 0) + t.amount;
-    return acc;
-  }, {});
-  const pieData = Object.entries(categoryTotals).map(([name, value]) => ({
-    name,
-    value,
-  }));
+  const pieData = Object.entries(
+    filteredTransactions.reduce((pieData, data) => {
+      pieData[data.category] = (pieData[data.category] || 0) + data.amount;
+      return pieData;
+    }, {})
+  ).map(([name, value]) => ({ name, value }));
 
-  const monthlyTotals = Array.from({ length: 12 }, (_, i) => ({
-    month: new Date(0, i).toLocaleString("default", { month: "short" }),
-    income: transactions
-      .filter((t) => t.type === "Income" && new Date(t.date).getMonth() === i)
-      .reduce((sum, t) => sum + t.amount, 0),
-    expense: transactions
-      .filter((t) => t.type === "Expense" && new Date(t.date).getMonth() === i)
-      .reduce((sum, t) => sum + t.amount, 0),
-  }));
-
+  const monthlyTotals = Array.from({ length: 12 }, (_, i) => {
+    const monthName = new Date(0, i).toLocaleString("default", { month: "short" });
+    const income = transactions
+      .filter(
+        (inc) =>
+          inc.type.toLowerCase() === "income" &&
+          new Date(inc.date).getMonth() === i)
+      .reduce((sum, inc) => sum + inc.amount, 0);
+    const expense = transactions
+      .filter(
+        (exp) =>
+          exp.type.toLowerCase() === "expense" &&
+          new Date(exp.date).getMonth() === i)
+      .reduce((sum, exp) => sum + exp.amount, 0);
+    return { month: monthName, income, expense };
+  });
   const COLORS = ["#22c55e", "#ef4444", "#3b82f6", "#f97316", "#a855f7"];
 
   return (
@@ -80,7 +95,7 @@ const Reports = () => {
         <select
           value={monthFilter}
           onChange={(e) => setMonthFilter(e.target.value)}
-          className=" border border-gray-700  px-4 py-2 rounded-lg">
+          className=" bg-neutral-500 border border-gray-700  px-4 py-2 rounded-lg">
           <option value="All">All Months</option>
           {[...Array(12)].map((_, i) => (
             <option key={i + 1} value={i + 1}>
@@ -91,15 +106,17 @@ const Reports = () => {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className=" border border-gray-700  px-4 py-2 rounded-lg">
+          className="bg-neutral-500 border border-gray-700  px-4 py-2 rounded-lg">
           <option value="All">All Categories</option>
           {[...new Set(transactions.map((t) => t.category))].map((c) => (
             <option key={c}>{c}</option>
           ))}
         </select>
+        <div className="bg-neutral-500 border border-gray-700 flex justify-center items-center px-10 rounded-lg">
+          Total $ : {totalBalance}
+        </div>
       </div>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Pie Chart */}
         <div className=" p-6 rounded-2xl shadow-lg">
           <h2 className="text-xl font-semibold mb-4 text-center">
             Expense Breakdown by Category

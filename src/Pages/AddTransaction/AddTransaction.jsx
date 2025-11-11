@@ -3,11 +3,13 @@ import { Button } from "@/components/ui/button"
 import { AuthContext } from '../../Contexts/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router';
 
 
 
 const AddTransaction = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleAddToTransaction = async (e) => {
     e.preventDefault()
@@ -32,7 +34,7 @@ const AddTransaction = () => {
     try {
       await axios.post("http://localhost:3000/add-Transaction", newTransaction);
       toast.success('Successfully Added A Transaction')
-      
+      navigate('/myTransaction')
     } catch (err) {
       console.log(err)
       toast.error("Failed To Add Transaction")
@@ -77,7 +79,7 @@ const AddTransaction = () => {
                 id="category"
                 name="category"
                 required
-                className="w-full bg-gray-400 p-3 rounded-md border  ">
+                className="w-full bg-neutral-700 p-3 rounded-md border  ">
                 <option value="" disabled>Select a category</option>
                 <option value="salary">Salary</option>
                 <option value="groceries">Groceries</option>
@@ -151,7 +153,7 @@ const AddTransaction = () => {
             </div>
             <Button
               type="submit"
-              className="w-full p-5 px-6 hover:bg-blue-700  font-bold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+              className="w-full p-5 px-6 font-bold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
               Add Transaction
             </Button>
           </form>

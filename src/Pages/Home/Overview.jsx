@@ -3,36 +3,34 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-
-
-
 const Overview = () => {
-
-    const { user, setloading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
-    const email = user.email;
-
+    const { user, setLoading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
     useEffect(() => {
         const fetchTransactions = async () => {
+            if (!user || !user.email) return;
             try {
-                const res = await axios.get(`http://localhost:3000/my-transactions?email=${email}`);
+                const res = await axios.get(`http://localhost:3000/my-transactions?email=${user.email}`);
                 const data = res.data;
                 const totalIncome = data
                     .filter((inc) => inc.type === 'income')
                     .reduce((sum, inc) => sum + Number(inc.amount), 0);
-                const totalExpence = data
+                const totalExpense = data
                     .filter((exp) => exp.type === 'expense')
                     .reduce((sum, exp) => sum + Number(exp.amount), 0);
                 setIncome(totalIncome);
-                setExpense(totalExpence);
-                setBalance(totalIncome - totalExpence);
+                setExpense(totalExpense);
+                setBalance(totalIncome - totalExpense);
             } catch (error) {
-                toast.error(error)
+                console.log(error);
+                toast.error("Failed to fetch transactions");
             } finally {
-                setloading(false);
+                
+                setLoading(false);
             }
+
         };
         fetchTransactions();
-    }, [email, setIncome, setExpense, setBalance, setloading]);
+    }, [user, setIncome, setExpense, setBalance, setLoading]);
 
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
