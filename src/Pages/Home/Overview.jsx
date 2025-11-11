@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from "../../Contexts/AuthContext";
 import axios from 'axios';
+import api from '../../api';
 import toast from 'react-hot-toast';
 
 const Overview = () => {
@@ -10,7 +11,7 @@ const Overview = () => {
         const fetchTransactions = async () => {
             if (!user || !user.email) return;
             try {
-                const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
+                const res = await axios.get(`/api/my-transactions?email=${user.email}`);
                 const data = res.data;
                 const totalIncome = data
                     .filter((inc) => inc.type === 'income')

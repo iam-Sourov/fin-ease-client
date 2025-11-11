@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Button } from "@/components/ui/button"
 import { AuthContext } from '../../Contexts/AuthContext';
 import axios from 'axios';
+import api from '../../api';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
 
@@ -33,7 +34,7 @@ const AddTransaction = () => {
       name: name
     }
     try {
-      await axios.post(`https://fine-ease-server.vercel.app/add-Transaction`, newTransaction);
+      await axios.post(`/api/add-Transaction`, newTransaction);
       toast.success('Successfully Added A Transaction')
       navigate('/myTransaction')
     } catch (err) {

@@ -3,6 +3,7 @@ import { Pencil, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import api from '../../../api';
 import axios from 'axios';
 import {
   Dialog,
@@ -26,7 +27,7 @@ const TransactionCard = () => {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`https://fine-ease-server.vercel.app/transaction/delete/${id}`);
+      await axios.delete(`/api/transaction/delete/${id}`);
       const filteredData = transactions.filter(data => data._id !== id);
       setTransactions(filteredData);
       toast.success('Successfully Deleted')
@@ -39,7 +40,7 @@ const TransactionCard = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
+        const res = await axios.get(`/api/my-transactions?email=${user.email}`);
         setTransactions(res.data);
       } catch (err) {
         console.log(err);
@@ -351,7 +352,7 @@ const TransactionCard = () => {
                           };
                           try {
                             const res = await axios.put(
-                              `https://fine-ease-server.vercel.app/transactions/update/${data._id}`, updatedTransaction);
+                              `/api/transactions/update/${data._id}`, updatedTransaction);
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
                               const updatedList = transactions.map(item =>
