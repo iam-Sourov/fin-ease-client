@@ -9,13 +9,13 @@ import { useNavigate } from 'react-router';
 
 const AddTransaction = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
+
   const navigate = useNavigate();
 
   const handleAddToTransaction = async (e) => {
     e.preventDefault()
     const form = e.target;
-    console.log(form);
+   
     const transactionType = form.transactionType.value;
     const category = form.category.value;
     const amount = parseFloat(form.amount.value);

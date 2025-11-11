@@ -1,3 +1,4 @@
+import { ChartLine, Lightbulb } from 'lucide-react';
 import React from 'react';
 
 
@@ -8,7 +9,8 @@ const StaticSections = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/10 shadow-lg">
                     <h2 className="text-2xl font-semibold mb-4 flex items-center">
-                        {/* <FaLightbulb className="mr-3 text-yellow-300" /> */}
+                        <Lightbulb className="mr-3 text-yellow-300" />
+                       
                         Budgeting Tips
                     </h2>
                     <ul className="list-disc list-inside space-y-2 ">
@@ -28,7 +30,7 @@ const StaticSections = () => {
                 </div>
                 <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/10  shadow-lg">
                     <h2 className="text-2xl font-semibold mb-4 flex items-center">
-                        {/* <FaChartLine className="mr-3 text-green-300" /> */}
+                        <ChartLine className="mr-3 text-green-300" />
                         Why Financial Planning Matters
                     </h2>
                     <p className=" mb-3">

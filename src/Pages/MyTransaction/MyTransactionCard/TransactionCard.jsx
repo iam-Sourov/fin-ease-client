@@ -303,7 +303,7 @@ const TransactionCard = () => {
                 </div>
                 {data.type === 'income' ? <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> : <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>}
               </div>
-              <div className="text-3xl font-mono tracking-wide mb-3">
+              <div className="text-3xl  tracking-wide mb-3">
                 ${data.amount}
               </div>
               <div className="space-y-1 text-sm">
@@ -313,7 +313,7 @@ const TransactionCard = () => {
                 <div>
                   <span className="font-semibold">Type:</span>{" "}
                   <span
-                    className={`${data.type === "income" ? "text-green-300" : "text-red-300"
+                    className={`${data.type === "income" ? "text-green-300 font-semibold bg-white px-2 py-1 rounded-md" : "text-red-400 font-semibold bg-white px-2 py-1 rounded-md"
                       } font-semibold `}>
                     {data.type}
                   </span>

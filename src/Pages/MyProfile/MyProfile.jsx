@@ -20,6 +20,8 @@ import { auth } from "../../Firebase/firebase.config";
 
 const MyProfile = () => {
   const { user, setUser, updateUser } = useContext(AuthContext);
+
+  
   const navigate = useNavigate()
 
   const [userData, setUserData] = useState([]);
@@ -38,7 +40,7 @@ const MyProfile = () => {
     const name = e.target.name.value;
     const image = e.target.image.value;
     const email = e.target.email.value;
-    console.log(name, email);
+
     updateUser({ displayName: name, photoURL: image, email: email })
       .then(() => {
         setUser({ ...auth.currentUser })
@@ -56,12 +58,12 @@ const MyProfile = () => {
         <h1 className="text-3xl font-bold mb-6">{userData?.displayName}</h1>
         <div className="relative w-32 h-32 mx-auto mb-6">
           <img
-            src={userData?.photoURL || "https://i.postimg.cc/7h8Zq4Rk/default-avatar.png"}
+            src={user?.photoURL || "https://i.postimg.cc/7h8Zq4Rk/default-avatar.png"}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover border-4 border-blue-600" />
         </div>
         <h2 className="text-2xl font-semibold mb-2">{user?.name}</h2>
-        <p className="text-gray-400 mb-6">{user?.email}</p>
+        <p className=" mb-6">{user?.email}</p>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Update Profile</Button>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import Navbar from '../Components/Navbar';
+import Navbar from '../components/Navbar';
 import { Outlet } from 'react-router';
-import Footer from '../Components/Footer';
+import Footer from '../components/Footer';
 import { Spinner } from "@/components/ui/spinner"
 import { AuthContext } from '../Contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';

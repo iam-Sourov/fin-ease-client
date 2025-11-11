@@ -15,7 +15,7 @@ import { Menu } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const Navbar = () => {
-    const { user, setUser, setIncome, setExpense, setBalance, LogOut } = useContext(AuthContext);
+    const { user, setUser, LogOut } = useContext(AuthContext);
 
     const navLinks = <>
         <NavLink to={'/'} > Home</NavLink>
@@ -27,10 +27,8 @@ const Navbar = () => {
         LogOut()
             .then(() => {
                 setUser(null);
-                setIncome(0)
-                setExpense(0)
-                setBalance(0)
             }).catch((error) => {
+                console.log(error);
                 toast.error('Failed To Signed Out')
             });
     }
@@ -46,7 +44,6 @@ const Navbar = () => {
                     }
                 </ul>
             </div>
-
             <div className='md:hidden block'>
                 <DropdownMenu>
                     <DropdownMenuTrigger><Menu /></DropdownMenuTrigger>

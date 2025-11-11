@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 
 const Overview = () => {
     const { user, setLoading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
+    
     useEffect(() => {
         const fetchTransactions = async () => {
             if (!user || !user.email) return;
