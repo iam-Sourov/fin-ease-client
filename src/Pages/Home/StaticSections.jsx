@@ -7,10 +7,10 @@ const StaticSections = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-20 ">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/10 shadow-lg">
+                <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/20 shadow-lg">
                     <h2 className="text-2xl font-semibold mb-4 flex items-center">
                         <Lightbulb className="mr-3 text-yellow-300" />
-                       
+
                         Budgeting Tips
                     </h2>
                     <ul className="list-disc list-inside space-y-2 ">
@@ -28,7 +28,7 @@ const StaticSections = () => {
                         </li>
                     </ul>
                 </div>
-                <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/10  shadow-lg">
+                <div className=" p-8  bg-white/5  backdrop-blur-md  rounded-xl  border  border-white/20  shadow-lg">
                     <h2 className="text-2xl font-semibold mb-4 flex items-center">
                         <ChartLine className="mr-3 text-green-300" />
                         Why Financial Planning Matters

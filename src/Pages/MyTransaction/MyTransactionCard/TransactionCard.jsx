@@ -6,6 +6,11 @@ import { Label } from "@/components/ui/label"
 import sim from '../../../assets/sim.svg'
 import axios from 'axios';
 import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "@/components/ui/button-group"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -59,7 +64,7 @@ const TransactionCard = () => {
   }
   return (
     <div className="p-2">
-      <div className="max-w-6xl mx-auto">
+      <div className=" mx-auto">
         {/* <div className="w-full overflow-x-auto rounded-lg border shadow-sm">
           <table className="min-w-full text-sm border-collapse">
             <thead className="">
@@ -289,8 +294,7 @@ const TransactionCard = () => {
           {
             transactions.map(data => <div
               key={data._id}
-              className={`w-90 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-500 to-green-700" : "bg-linear-to-br from-red-500 to-red-700"} rounded-2xl shadow-lg  flex flex-col transform transition-all hover:scale-105`}>
-
+              className={`w-98 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-600/20 to-green-800/20" : "bg-linear-to-br from-red-600/20 to-red-800/20"} rounded-2xl shadow-lg  flex flex-col transform transition-all hover:scale-105`}>
               <div className="flex justify-between items-start mb-4" >
                 <div className="w-12 h-9  shadow-inner flex items-center justify-center">
                   <img src={sim} alt="" />
@@ -303,7 +307,7 @@ const TransactionCard = () => {
                 </div>
                 {data.type === 'income' ? <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> : <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>}
               </div>
-              <div className="text-3xl  tracking-wide mb-3">
+              <div className="text-3xl tracking-wide mb-3">
                 ${data.amount}
               </div>
               <div className="space-y-1 text-sm">
@@ -331,8 +335,10 @@ const TransactionCard = () => {
                   <span className="font-semibold">Description:</span> {data.description}
                 </div>
               </div>
-              <div className='flex mt-4 gap-2'>
-                <div>
+              {/* button */}
+              <div className='grid place-content-center mt-4'>
+
+                <ButtonGroup>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button className="inline-flex items-center px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
@@ -433,8 +439,6 @@ const TransactionCard = () => {
                       </form>
                     </DialogContent>
                   </Dialog>
-                </div>
-                <div>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button className="inline-flex items-center px-2 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200">
@@ -461,8 +465,6 @@ const TransactionCard = () => {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                </div>
-                <div>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button className="inline-flex items-center px-2 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200">
@@ -517,7 +519,7 @@ const TransactionCard = () => {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                </div>
+                </ButtonGroup>
               </div>
             </div>)
           }

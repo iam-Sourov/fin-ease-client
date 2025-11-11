@@ -1,13 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { AuthContext } from '../../Contexts/AuthContext';
 import axios from 'axios';
+import { Spinner } from "@/components/ui/spinner"
 import toast from 'react-hot-toast';
+
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+
+
 import { useNavigate } from 'react-router';
 
 
 
 const AddTransaction = () => {
+  const [shadCategory, setCategory] = useState('');
+  console.log(shadCategory);
+
+  const [shadDate, setDate] = useState()
+  console.log(shadDate);
+  const [loading, setLoading] = useState(false)
+
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -15,30 +45,35 @@ const AddTransaction = () => {
   const handleAddToTransaction = async (e) => {
     e.preventDefault()
     const form = e.target;
-
     const transactionType = form.transactionType.value;
-    const category = form.category.value;
+    const category = shadCategory;
     const amount = parseFloat(form.amount.value);
     const description = form.description.value;
-    const date = form.date.value;
+    const date = shadDate;
     const email = form.email.value;
     const name = form.name.value;
+
     const newTransaction = {
       type: transactionType,
       category: category,
       amount: amount,
       description: description,
-      date: date,
+      date: format(date, "yyyy-mm-dd"),
       email: email,
       name: name
     }
+
     try {
+      setLoading(true)
       await axios.post(`https://fine-ease-server.vercel.app/add-Transaction`, newTransaction);
       toast.success('Successfully Added A Transaction')
       navigate('/myTransaction')
     } catch (err) {
       console.log(err)
+      setLoading(false)
       toast.error("Failed To Add Transaction")
+    } finally {
+      setLoading(false)
     }
   }
   return (
@@ -76,19 +111,39 @@ const AddTransaction = () => {
               <label className="block mb-2 text-sm font-medium ">
                 Category
               </label>
-              <select
+              <Select onValueChange={(value) => setCategory(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select your category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem name='category' id='category' value="salary">Salary</SelectItem>
+                    <SelectItem name='category' id='category' value="groceries">Groceries</SelectItem>
+                    <SelectItem name='category' id='category' value="utilities">Utilities</SelectItem>
+                    <SelectItem name='category' id='category' value="rent">Rent</SelectItem>
+                    <SelectItem name='category' id='category' value="entertainment">Entertainment</SelectItem>
+                    <SelectItem name='category' id='category' value="other">Other</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {/* <Select
                 id="category"
                 name="category"
                 required
                 className="w-full bg-neutral-700 p-3 rounded-md border  ">
-                <option value="" disabled>Select a category</option>
-                <option value="salary">Salary</option>
-                <option value="groceries">Groceries</option>
-                <option value="utilities">Utilities</option>
-                <option value="rent">Rent</option>
-                <option value="entertainment">Entertainment</option>
-                <option value="other">Other</option>
-              </select>
+                <SelectContent>
+                  <SelectTrigger className="w-[180px]">
+                    
+                    <SelectValue placeholder="Theme" />
+                  </SelectTrigger>
+                  <SelectItem value="salary">Salary</SelectItem>
+                  <SelectItem value="groceries">Groceries</SelectItem>
+                  <SelectItem value="utilities">Utilities</SelectItem>
+                  <SelectItem value="rent">Rent</SelectItem>
+                  <SelectItem value="entertainment">Entertainment</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select> */}
             </div>
             <div>
               <label htmlFor="amount" className="block mb-2 text-sm font-medium ">
@@ -119,12 +174,27 @@ const AddTransaction = () => {
               <label htmlFor="date" className="block mb-2 text-sm font-medium ">
                 Date
               </label>
-              <input
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    data-empty={!shadDate}
+                    className="data-[empty=true]:text-muted-foreground w-[280px] justify-start text-left font-normal"
+                  >
+                    <CalendarIcon />
+                    {shadDate ? format(shadDate, "yyyy-mm-dd") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar mode="single" selected={shadDate} onSelect={setDate} />
+                </PopoverContent>
+              </Popover>
+              {/* <input
                 type="date"
                 id="date"
                 name="date"
                 required
-                className="w-full p-3   rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full p-3   rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" /> */}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -151,11 +221,16 @@ const AddTransaction = () => {
                   readOnly
                   className="w-full p-3   rounded-md border border-gray-500 cursor-not-allowed" />
               </div>
+
             </div>
+
             <Button
+              disabled={loading}
               type="submit"
               className="w-full p-5 px-6 font-bold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-              Add Transaction
+              {
+                loading ? <Spinner /> : "Add Transaction"
+              }
             </Button>
           </form>
         </div>

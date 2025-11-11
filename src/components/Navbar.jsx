@@ -33,7 +33,7 @@ const Navbar = () => {
             });
     }
     return (
-        <div className="w-full flex justify-between items-center bg-white/10 border p-3  ">
+        <div className="w-full flex justify-between items-center bg-white/20 border p-3  ">
             <div className="hidden md:flex lg:flex">
                 <a className=" text-xl">Fin-EASE</a>
             </div>
