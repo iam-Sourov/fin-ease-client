@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router';
 
 const AddTransaction = () => {
   const { user } = useContext(AuthContext);
+  console.log(user);
   const navigate = useNavigate();
 
   const handleAddToTransaction = async (e) => {

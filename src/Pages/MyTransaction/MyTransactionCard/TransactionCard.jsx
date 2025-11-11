@@ -14,6 +14,13 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { AuthContext } from '../../../Contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -35,7 +42,7 @@ const TransactionCard = () => {
     }
   }
 
-  
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -284,21 +291,18 @@ const TransactionCard = () => {
           </table>
         </div> */}
 
-
-
         <div className="grid grid-cols-1 md:grid-cols-3 place-items-center gap-4 ">
           {
             transactions.map(data => <div
               key={data._id}
               className={`w-92 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-500 to-green-700" : "bg-linear-to-br from-red-500 to-red-700"} rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105`}>
 
-              <div div className="flex justify-between items-start mb-4" >
+              <div className="flex justify-between items-start mb-4" >
                 <div className="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner flex items-center justify-center">
                   <div className="w-9 h-6 bg-gray-600 rounded-sm"></div>
                 </div>
                 {data.type === 'income' ? <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> : <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>}
               </div>
-
               <div className="text-3xl font-mono tracking-wide mb-3">
                 ${data.amount}
               </div>
@@ -385,8 +389,7 @@ const TransactionCard = () => {
                               id="description"
                               name="description"
                               defaultValue={data.description}
-                              required
-                            />
+                              required />
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="category">Category</Label>
@@ -394,8 +397,7 @@ const TransactionCard = () => {
                               id="category"
                               name="category"
                               defaultValue={data.category}
-                              required
-                            />
+                              required />
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="amount">Amount</Label>
@@ -404,8 +406,7 @@ const TransactionCard = () => {
                               name="amount"
                               type="number"
                               defaultValue={data.amount}
-                              required
-                            />
+                              required />
                           </div>
                           <div className="grid gap-2">
                             <Label htmlFor="date">Date</Label>
@@ -414,8 +415,7 @@ const TransactionCard = () => {
                               name="date"
                               type="date"
                               defaultValue={data.date?.split("T")[0]}
-                              required
-                            />
+                              required />
                           </div>
                         </div>
                         <DialogFooter>

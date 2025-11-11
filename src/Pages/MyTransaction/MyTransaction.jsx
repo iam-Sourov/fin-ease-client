@@ -15,7 +15,7 @@ const MyTransaction = () => {
           <p className="text-xl md:text-2xl mt-4 font-light">
             Your journey to financial freedom starts today.
           </p>
-          <h1 className="text-2xl font-semibold mb-4 mt-4 text-center">
+          <h1 className="text-2xl font-semibold  mt-4 text-center">
             My Transactions
           </h1>
         </div>

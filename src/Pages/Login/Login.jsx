@@ -12,19 +12,27 @@ const Login = () => {
     const navigate = useNavigate()
     const location = useLocation();
 
-    const handleSubmit = (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
+        const regEx = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
         const email = e.target.email.value;
         const password = e.target.password.value;
-
+        // if (!regEx.test(password)) {
+        //     toast.error('Password must contain at least one uppercase letter, one lowercase letter, and be at least 6 characters long.')
+        //     setLoading(false);
+        //     return;
+        // }
         LogIn(email, password)
             .then((res) => {
                 setUser(res.user);
                 toast.success("logged in")
                 navigate(`${location.state ? location.state : '/'}`);
             })
-            .catch((err) => toast(err))
-            .finaly(() => {
+            .catch(err => {
+                console.log(err);
+                toast.error('Failed To Login',err);
+            })
+            .finally(() => {
                 setLoading(false)
             })
     };
@@ -43,7 +51,7 @@ const Login = () => {
         <div className="flex items-center  justify-center min-h-screen bg-base-100 text-base-content transition-colors duration-300 p-4">
             <div className="card border bg-base-200 p-8 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleLogin}>
                     <FormInput label="Email" name="email" type="email" placeholder="you@example.com" />
                     <FormInput label="Password" name="password" type="password" placeholder="••••••••" />
                     <button className="btn btn-primary w-full">Login</button>

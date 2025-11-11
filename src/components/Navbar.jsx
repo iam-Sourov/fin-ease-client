@@ -12,9 +12,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Menu } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
-    const { user, LogOut } = useContext(AuthContext);
+    const { user, setUser, setIncome, setExpense, setBalance, LogOut } = useContext(AuthContext);
 
     const navLinks = <>
         <NavLink to={'/'} > Home</NavLink>
@@ -22,7 +23,17 @@ const Navbar = () => {
         <NavLink to={'/myTransaction'}>My Transactions</NavLink>
         <NavLink to={'/reports'}>Reports</NavLink>
     </>
-
+    const handleSignOut = () => {
+        LogOut()
+            .then(() => {
+                setUser(null);
+                setIncome(0)
+                setExpense(0)
+                setBalance(0)
+            }).catch((error) => {
+                toast.error('Failed To Signed Out')
+            });
+    }
     return (
         <div className=" w-full flex justify-between items-center  bg-white/10 border  p-2  ">
             <div className="hidden lg:flex">
@@ -61,7 +72,7 @@ const Navbar = () => {
                                     <DropdownMenuItem><Link to={'/myProfile'}>My Profile</Link></DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <Button onClick={LogOut} className="btn shadow-none ">LogOut</Button>
+                            <Button onClick={handleSignOut} className="btn shadow-none ">LogOut</Button>
                         </div> : <>
                             <Link to={'/login'}><Button className=" shadow-none ">Login</Button></Link>
                             <Link to={'/signup'}> <Button className=" bg-primary">Signup</Button></Link>

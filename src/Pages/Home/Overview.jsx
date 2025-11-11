@@ -24,14 +24,15 @@ const Overview = () => {
                 console.log(error);
                 toast.error("Failed to fetch transactions");
             } finally {
-                
                 setLoading(false);
             }
 
         };
         fetchTransactions();
     }, [user, setIncome, setExpense, setBalance, setLoading]);
-
+    if (!user) {
+        return <div className="text-center py-10 text-lg">Please log in to view your overview.</div>;
+    }
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className=" grid  grid-cols-1 md:grid-cols-3 place-items-center gap-6 -mt-16">
@@ -46,7 +47,7 @@ const Overview = () => {
                         $ {balance.toLocaleString()}
                     </div>
                     <div className='space-y-2'>
-                        <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
+                        <div className="text-xs uppercase font-light tracking-wider">{user && user.displayName || 'Card Holder'}</div>
                         <div className="text-xl font-medium">Total Balance</div>
                     </div>
                 </div>
@@ -61,7 +62,7 @@ const Overview = () => {
                         $ {income.toLocaleString()}
                     </div>
                     <div className='space-y-2'>
-                        <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
+                        <div className="text-xs uppercase font-light tracking-wider">{user && user.displayName || 'Card Holder'}</div>
                         <div className="text-xl font-medium">Total Income</div>
                     </div>
                 </div>
@@ -76,7 +77,7 @@ const Overview = () => {
                         $ {expense.toLocaleString()}
                     </div>
                     <div className='space-y-2'>
-                        <div className="text-xs uppercase font-light tracking-wider">Card Holder</div>
+                        <div className="text-xs uppercase font-light tracking-wider">{user && user.displayName || 'Card Holder'}</div>
                         <div className="text-xl font-medium">Total Expenses</div>
                     </div>
                 </div>
