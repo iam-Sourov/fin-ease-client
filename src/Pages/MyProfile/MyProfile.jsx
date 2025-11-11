@@ -73,7 +73,7 @@ const MyProfile = () => {
               <DialogHeader>
                 <DialogTitle>Edit profile</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you&apos;re
+                  Make changes to your profile here. Click save when you're
                   done.
                 </DialogDescription>
               </DialogHeader>

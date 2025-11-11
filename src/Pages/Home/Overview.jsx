@@ -5,12 +5,12 @@ import toast from 'react-hot-toast';
 
 const Overview = () => {
     const { user, setLoading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
-    
+
     useEffect(() => {
         const fetchTransactions = async () => {
             if (!user || !user.email) return;
             try {
-                const res = await axios.get(`http://localhost:3000/my-transactions?email=${user.email}`);
+                const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
                 const data = res.data;
                 const totalIncome = data
                     .filter((inc) => inc.type === 'income')
@@ -27,7 +27,6 @@ const Overview = () => {
             } finally {
                 setLoading(false);
             }
-
         };
         fetchTransactions();
     }, [user, setIncome, setExpense, setBalance, setLoading]);

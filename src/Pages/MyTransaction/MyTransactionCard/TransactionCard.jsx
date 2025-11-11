@@ -14,13 +14,7 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+
 import { AuthContext } from '../../../Contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -32,7 +26,7 @@ const TransactionCard = () => {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/transaction/delete/${id}`);
+      await axios.delete(`https://fine-ease-server.vercel.app/transaction/delete/${id}`);
       const filteredData = transactions.filter(data => data._id !== id);
       setTransactions(filteredData);
       toast.success('Successfully Deleted')
@@ -42,11 +36,10 @@ const TransactionCard = () => {
     }
   }
 
-
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/my-transactions?email=${user.email}`);
+        const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
         setTransactions(res.data);
       } catch (err) {
         console.log(err);
@@ -117,7 +110,7 @@ const TransactionCard = () => {
                             };
                             try {
                               const res = await axios.put(
-                                `http://localhost:3000/transactions/update/${data._id}`, updatedTransaction);
+                                `${API_URL}/transactions/update/${data._id}`, updatedTransaction);
                               if (res.data.modifiedCount > 0) {
                                 toast.success("Transaction updated successfully!");
                                 const updatedList = transactions.map(item =>
@@ -291,7 +284,7 @@ const TransactionCard = () => {
           </table>
         </div> */}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 place-items-center gap-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4 ">
           {
             transactions.map(data => <div
               key={data._id}
@@ -358,7 +351,7 @@ const TransactionCard = () => {
                           };
                           try {
                             const res = await axios.put(
-                              `http://localhost:3000/transactions/update/${data._id}`, updatedTransaction);
+                              `${API_URL}/transactions/update/${data._id}`, updatedTransaction);
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
                               const updatedList = transactions.map(item =>

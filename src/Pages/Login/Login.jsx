@@ -17,11 +17,11 @@ const Login = () => {
         const regEx = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
         const email = e.target.email.value;
         const password = e.target.password.value;
-        // if (!regEx.test(password)) {
-        //     toast.error('Password must contain at least one uppercase letter, one lowercase letter, and be at least 6 characters long.')
-        //     setLoading(false);
-        //     return;
-        // }
+        if (!regEx.test(password)) {
+            toast.error('Password must contain at least one uppercase letter, one lowercase letter, and be at least 6 characters long.')
+            setLoading(false);
+            return;
+        }
         LogIn(email, password)
             .then((res) => {
                 setUser(res.user);
@@ -30,7 +30,7 @@ const Login = () => {
             })
             .catch(err => {
                 console.log(err);
-                toast.error('Failed To Login',err);
+                toast.error('Failed To Login', err);
             })
             .finally(() => {
                 setLoading(false)

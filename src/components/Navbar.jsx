@@ -34,17 +34,17 @@ const Navbar = () => {
     }
     return (
         <div className=" w-full flex justify-between items-center  bg-white/10 border  p-2  ">
-            <div className="hidden lg:flex">
+            <div className="hidden md:flex lg:flex">
                 <a className=" text-xl">Fin-EASE</a>
             </div>
-            <div className="hidden lg:flex ">
+            <div className="hidden md:flex lg:flex ">
                 <ul className="menu menu-horizontal space-x-4 font-semibold">
                     {
                         navLinks
                     }
                 </ul>
             </div>
-            <div className='md:hidden block'>
+            <div className='md:hidden block '>
                 <DropdownMenu>
                     <DropdownMenuTrigger><Menu /></DropdownMenuTrigger>
                     <DropdownMenuContent>

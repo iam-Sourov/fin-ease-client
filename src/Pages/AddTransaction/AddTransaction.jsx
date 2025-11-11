@@ -15,7 +15,7 @@ const AddTransaction = () => {
   const handleAddToTransaction = async (e) => {
     e.preventDefault()
     const form = e.target;
-   
+
     const transactionType = form.transactionType.value;
     const category = form.category.value;
     const amount = parseFloat(form.amount.value);
@@ -33,7 +33,7 @@ const AddTransaction = () => {
       name: name
     }
     try {
-      await axios.post("http://localhost:3000/add-Transaction", newTransaction);
+      await axios.post(`https://fine-ease-server.vercel.app/add-Transaction`, newTransaction);
       toast.success('Successfully Added A Transaction')
       navigate('/myTransaction')
     } catch (err) {
