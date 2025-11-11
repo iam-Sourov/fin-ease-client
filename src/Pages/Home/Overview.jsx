@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from "../../Contexts/AuthContext";
 import axios from 'axios';
-import api from '../../api';
 import toast from 'react-hot-toast';
+import sim from '../../../src/assets/sim.svg'
 
 const Overview = () => {
     const { user, setLoading, income, setIncome, expense, setExpense, balance, setBalance } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const Overview = () => {
         const fetchTransactions = async () => {
             if (!user || !user.email) return;
             try {
-                const res = await axios.get(`/api/my-transactions?email=${user.email}`);
+                const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
                 const data = res.data;
                 const totalIncome = data
                     .filter((inc) => inc.type === 'income')
@@ -39,8 +39,14 @@ const Overview = () => {
             <div className=" grid  grid-cols-1 md:grid-cols-3 place-items-center gap-6 -mt-16">
                 <div className="w-80 h-48 p-6 bg-linear-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
                     <div className="flex justify-between items-start">
-                        <div className="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner">
-                            <div className="w-9 h-6 m-1.5 bg-gray-600 rounded-sm"></div>
+                        <div className="w-12 h-9 shadow-inner flex items-center justify-center">
+                            <img src={sim} alt="" />
+                            {/* <div className="w-9 h-6 border-4 border-dotted border-yellow-400 bg-gray-600 rounded-md flex items-center justify-center">
+                                <div className="w-8 h-5 border-4  border-yellow-400 bg-gray-600 rounded-xl flex items-center justify-center">
+                                    <div className="w-7 h-4 border-2 border-dotted border-yellow-400 bg-gray-600 rounded">
+                                    </div>
+                                </div>
+                            </div> */}
                         </div>
                         <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H7a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                     </div>
@@ -54,8 +60,15 @@ const Overview = () => {
                 </div>
                 <div className="w-80 h-48 p-6 bg-linear-to-br from-green-500 to-green-700 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
                     <div className="flex justify-between items-start">
-                        <div className="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner">
-                            <div className="w-9 h-6 m-1.5 bg-gray-600 rounded-sm"></div>
+                        <div className="w-12 h-9 shadow-inner flex items-center justify-center">
+                            <img src={sim} alt="" />
+                            {/* <div className="w-9 h-6 border-4 border-dotted border-yellow-400 bg-gray-600 rounded-md flex items-center justify-center">
+                                
+                                <div className="w-8 h-5 border-4  border-yellow-400 bg-gray-600 rounded-xl flex items-center justify-center">
+                                    <div className="w-7 h-4 border-2 border-dotted border-yellow-400 bg-gray-600 rounded">
+                                    </div>
+                                </div>
+                            </div> */}
                         </div>
                         <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
                     </div>
@@ -69,8 +82,14 @@ const Overview = () => {
                 </div>
                 <div className="w-80 h-48 p-6 bg-linear-to-br from-red-500 to-red-700 rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105">
                     <div className="flex justify-between items-start">
-                        <div className="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner">
-                            <div className="w-9 h-6 m-1.5 bg-gray-600 rounded-sm"></div>
+                        <div className="w-12 h-9 shadow-inner flex items-center justify-center">
+                            <img src={sim} alt="" />
+                            {/* <div className="w-9 h-6 border-4 border-dotted border-yellow-400 bg-gray-600 rounded-md flex items-center justify-center">
+                                <div className="w-8 h-5 border-4  border-yellow-400 bg-gray-600 rounded-xl flex items-center justify-center">
+                                    <div className="w-7 h-4 border-2 border-dotted border-yellow-400 bg-gray-600 rounded">
+                                    </div>
+                                </div>
+                            </div> */}
                         </div>
                         <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
                     </div>

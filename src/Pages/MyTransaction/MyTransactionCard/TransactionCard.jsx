@@ -3,7 +3,7 @@ import { Pencil, Trash2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import api from '../../../api';
+import sim from '../../../assets/sim.svg'
 import axios from 'axios';
 import {
   Dialog,
@@ -27,7 +27,7 @@ const TransactionCard = () => {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`/api/transaction/delete/${id}`);
+      await axios.delete(`https://fine-ease-server.vercel.app/transaction/delete/${id}`);
       const filteredData = transactions.filter(data => data._id !== id);
       setTransactions(filteredData);
       toast.success('Successfully Deleted')
@@ -40,7 +40,7 @@ const TransactionCard = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await axios.get(`/api/my-transactions?email=${user.email}`);
+        const res = await axios.get(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
         setTransactions(res.data);
       } catch (err) {
         console.log(err);
@@ -285,15 +285,21 @@ const TransactionCard = () => {
           </table>
         </div> */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-4 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-3 ">
           {
             transactions.map(data => <div
               key={data._id}
-              className={`w-92 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-500 to-green-700" : "bg-linear-to-br from-red-500 to-red-700"} rounded-2xl shadow-lg text-white flex flex-col justify-between transform transition-all hover:scale-105`}>
+              className={`w-90 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-500 to-green-700" : "bg-linear-to-br from-red-500 to-red-700"} rounded-2xl shadow-lg  flex flex-col transform transition-all hover:scale-105`}>
 
               <div className="flex justify-between items-start mb-4" >
-                <div className="w-12 h-9 bg-linear-to-br from-gray-300 to-gray-400 rounded-md shadow-inner flex items-center justify-center">
-                  <div className="w-9 h-6 bg-gray-600 rounded-sm"></div>
+                <div className="w-12 h-9  shadow-inner flex items-center justify-center">
+                  <img src={sim} alt="" />
+                  {/* <div className="w-9 h-6 border-4 border-dotted border-yellow-400 bg-gray-600 rounded-md flex items-center justify-center">
+                    <div className="w-8 h-5 border-4  border-yellow-400 bg-gray-600 rounded-xl flex items-center justify-center">
+                      <div className="w-7 h-4 border-2 border-dotted border-yellow-400 bg-gray-600 rounded">
+                      </div>
+                    </div>
+                  </div> */}
                 </div>
                 {data.type === 'income' ? <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> : <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>}
               </div>
@@ -304,10 +310,10 @@ const TransactionCard = () => {
                 <div>
                   <span className="font-semibold">Category:</span> {data.category}
                 </div>
-                <div>
+                <div className='flex justify-start gap-2 items-center'>
                   <span className="font-semibold">Type:</span>{" "}
                   <span
-                    className={`${data.type === "income" ? "text-green-300 font-semibold bg-white px-2 py-1 rounded-md" : "text-red-400 font-semibold bg-white px-2 py-1 rounded-md"
+                    className={`${data.type === "income" ? "text-green-600 font-semibold bg-white border-2 border-dotted border-green-600 px-2 py-1 rounded-md" : "text-red-600 font-semibold bg-white border-2 border-dotted border-red-600 px-2 py-1 rounded-md"
                       } font-semibold `}>
                     {data.type}
                   </span>
@@ -352,7 +358,7 @@ const TransactionCard = () => {
                           };
                           try {
                             const res = await axios.put(
-                              `/api/transactions/update/${data._id}`, updatedTransaction);
+                              `https://fine-ease-server.vercel.app/transactions/update/${data._id}`, updatedTransaction);
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
                               const updatedList = transactions.map(item =>

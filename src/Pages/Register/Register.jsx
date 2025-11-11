@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button } from "@/components/ui/button"
 import { AuthContext } from "../../Contexts/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router";
-import FormInput from "../../Components/FormInput";
+import FormInput from "@/components/FormInput";
 import toast from "react-hot-toast";
 
 const Register = () => {

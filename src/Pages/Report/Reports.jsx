@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useContext } from "react";
-import api from '../../api';
 import {
   PieChart,
   Pie,
@@ -24,7 +23,7 @@ const Reports = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const res = await fetch(`/api/my-transactions?email=${user.email}`);
+        const res = await fetch(`https://fine-ease-server.vercel.app/my-transactions?email=${user.email}`);
         const data = await res.json();
         setTransactions(data);
         setLoading(false);
