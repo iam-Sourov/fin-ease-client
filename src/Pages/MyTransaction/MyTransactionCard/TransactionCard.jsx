@@ -351,7 +351,7 @@ const TransactionCard = () => {
                           };
                           try {
                             const res = await axios.put(
-                              `${API_URL}/transactions/update/${data._id}`, updatedTransaction);
+                              `https://fine-ease-server.vercel.app/transactions/update/${data._id}`, updatedTransaction);
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
                               const updatedList = transactions.map(item =>
