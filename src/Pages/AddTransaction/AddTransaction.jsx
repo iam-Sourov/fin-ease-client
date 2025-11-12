@@ -116,14 +116,25 @@ const AddTransaction = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
+                    <SelectLabel>Income</SelectLabel>
                     <SelectItem value="salary">Salary</SelectItem>
-                    <SelectItem value="groceries">Groceries</SelectItem>
-                    <SelectItem value="utilities">Utilities</SelectItem>
+                    <SelectItem value="scholarship">Scholarship</SelectItem>
+                    <SelectItem value="commission">Commission</SelectItem>
+                  </SelectGroup>
+
+                  <SelectGroup>
+                    <SelectLabel>Expenses</SelectLabel>
                     <SelectItem value="rent">Rent</SelectItem>
+                    <SelectItem value="utilities">Utilities</SelectItem>
+                    <SelectItem value="groceries">Groceries</SelectItem>
+                    <SelectItem value="food">Food</SelectItem>
+                    <SelectItem value="transport">Transport</SelectItem>
+                    <SelectItem value="health">Health</SelectItem>
                     <SelectItem value="entertainment">Entertainment</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectGroup>
                 </SelectContent>
+
               </Select>
             </div>
             <div>
