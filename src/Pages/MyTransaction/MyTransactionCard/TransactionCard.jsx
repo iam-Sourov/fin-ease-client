@@ -39,6 +39,9 @@ import {
 const TransactionCard = () => {
   const { user, setLoading } = useContext(AuthContext);
   const [shadDate, setDate] = useState()
+  const [off, setOff] = useState('')
+  console.log(off);
+
   const [shadCategory, setCategory] = useState('');
   const [selectedType, setSelectedType] = useState('');
 
@@ -375,6 +378,9 @@ const TransactionCard = () => {
                             date: shadDate ? format(shadDate, "yyyy-MM-dd") : data.date?.split("T")[0],
                           };
 
+                          if (updatedTransaction.description.trim() === "") {
+                            return;
+                          }
                           try {
                             const res = await axios.put(
                               `https://fine-ease-server.vercel.app/transactions/update/${data._id}`,
@@ -476,6 +482,7 @@ const TransactionCard = () => {
                             Description
                           </Label>
                           <textarea
+                            onChange={(e) => setOff(e.target.value)}
                             id="description"
                             name="description"
                             rows="3"
@@ -517,6 +524,7 @@ const TransactionCard = () => {
                           </DialogClose>
                           <DialogClose asChild>
                             <Button
+                              disabled={!off}
                               type="submit"
                               className="bg-blue-600 text-white hover:bg-blue-700 w-full md:w-auto">
                               Save Changes
