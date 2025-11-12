@@ -31,14 +31,11 @@ import {
 
 
 const AddTransaction = () => {
-  const [shadCategory, setCategory] = useState('');
-  console.log(shadCategory);
-
-  const [shadDate, setDate] = useState()
-  console.log(shadDate);
-  const [loading, setLoading] = useState(false)
-
   const { user } = useContext(AuthContext);
+  const [shadCategory, setCategory] = useState('');
+  const [shadDate, setDate] = useState()
+  const [selectedType, setSelectedType] = useState('');
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate();
 
@@ -75,6 +72,7 @@ const AddTransaction = () => {
       setLoading(false)
     }
   }
+  
   return (
     <div className="min-h-screen">
       <div className="container mx-auto max-w-2xl p-4 md:p-8">
@@ -93,6 +91,8 @@ const AddTransaction = () => {
                     type="radio"
                     name="transactionType"
                     value="income"
+                    checked={selectedType === "income"}
+                    onChange={() => setSelectedType("income")}
                     className="w-5 h-5 text-green-500  focus:ring-green-500" />
                   <span className="text-green-400 font-medium">Income</span>
                 </label>
@@ -101,6 +101,8 @@ const AddTransaction = () => {
                     type="radio"
                     name="transactionType"
                     value="expense"
+                    checked={selectedType === "expense"}
+                    onChange={() => setSelectedType("expense")}
                     className="w-5 h-5 text-red-500 focus:ring-red-500" />
                   <span className="text-red-400 font-medium">Expense</span>
                 </label>
@@ -115,14 +117,12 @@ const AddTransaction = () => {
                   <SelectValue placeholder="Select your category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectGroup>
+                  {selectedType === "income" ? <SelectGroup>
                     <SelectLabel>Income</SelectLabel>
                     <SelectItem value="salary">Salary</SelectItem>
                     <SelectItem value="scholarship">Scholarship</SelectItem>
                     <SelectItem value="commission">Commission</SelectItem>
-                  </SelectGroup>
-
-                  <SelectGroup>
+                  </SelectGroup> : <SelectGroup>
                     <SelectLabel>Expenses</SelectLabel>
                     <SelectItem value="rent">Rent</SelectItem>
                     <SelectItem value="utilities">Utilities</SelectItem>
@@ -132,9 +132,8 @@ const AddTransaction = () => {
                     <SelectItem value="health">Health</SelectItem>
                     <SelectItem value="entertainment">Entertainment</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
-                  </SelectGroup>
+                  </SelectGroup>}
                 </SelectContent>
-
               </Select>
             </div>
             <div>
@@ -158,6 +157,7 @@ const AddTransaction = () => {
                 id="description"
                 name="description"
                 rows="3"
+                required
                 placeholder="e.g., Weekly groceries at store"
                 className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
               </textarea>

@@ -40,7 +40,13 @@ const TransactionCard = () => {
   const { user, setLoading } = useContext(AuthContext);
   const [shadDate, setDate] = useState()
   const [shadCategory, setCategory] = useState('');
-  console.log(shadCategory);
+  const [selectedType, setSelectedType] = useState('');
+
+  console.log(shadDate, shadCategory, selectedType);
+
+
+
+
 
   const [transactions, setTransactions] = useState([]);
   const handleRemove = async (id) => {
@@ -74,6 +80,9 @@ const TransactionCard = () => {
     return transactions
       .filter((cat) => cat.category === category)
       .reduce((sum, cat) => sum + cat.amount, 0);
+  }
+  if (transactions.length == 0) {
+    return <div className="text-center py-10 text-lg">Please add transaction from "Add Transaction page" to view your transactions.</div>;
   }
   return (
     <div className="p-2">
@@ -346,7 +355,14 @@ const TransactionCard = () => {
               </div>
               <div className='grid place-content-center mt-4'>
                 <ButtonGroup>
-                  <Dialog>
+                  <Dialog
+                    onOpenChange={(isOpen) => {
+                      if (isOpen) {
+                        setSelectedType(data.type);
+                        setCategory(data.category);
+                        setDate(data.date ? new Date(data.date) : null);
+                      }
+                    }}>
                     <DialogTrigger asChild>
                       <Button className="inline-flex items-center px-2 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
                         <Pencil size={16} className="mr-1" /> Update
@@ -357,20 +373,12 @@ const TransactionCard = () => {
                         onSubmit={async (e) => {
                           e.preventDefault();
                           const form = e.target;
-                          const type = form.transactionType.value;
-                          const category = shadCategory;
-                          const amount = parseFloat(form.amount.value);
-                          const description = form.description.value;
-
-                          const dateValue = shadDate
-                            ? format(shadDate, "yyyy-MM-dd")
-                            : data.date?.split("T")[0];
                           const updatedTransaction = {
-                            type,
-                            category,
-                            amount,
-                            description,
-                            date: dateValue,
+                            type: selectedType,
+                            category: shadCategory || data.category,
+                            amount: parseFloat(form.amount.value),
+                            description: form.description.value,
+                            date: shadDate ? format(shadDate, "yyyy-MM-dd") : data.date?.split("T")[0],
                           };
                           try {
                             const res = await axios.put(
@@ -399,16 +407,15 @@ const TransactionCard = () => {
                           </DialogDescription>
                         </DialogHeader>
                         <fieldset>
-                          <legend className="block mb-2 text-sm font-medium">
-                            Transaction Type
-                          </legend>
+                          <legend className="block mb-2 text-sm font-medium">Transaction Type</legend>
                           <div className="flex items-center gap-6">
                             <Label className="flex items-center space-x-2 cursor-pointer">
                               <Input
                                 type="radio"
                                 name="transactionType"
                                 value="income"
-                                defaultChecked={data.type === "income"}
+                                checked={selectedType === "income"}
+                                onChange={() => setSelectedType("income")}
                                 className="w-5 h-5 text-green-500 focus:ring-green-500" />
                               <span className="text-green-500 font-medium">Income</span>
                             </Label>
@@ -417,7 +424,8 @@ const TransactionCard = () => {
                                 type="radio"
                                 name="transactionType"
                                 value="expense"
-                                defaultChecked={data.type === "expense"}
+                                checked={selectedType === "expense"}
+                                onChange={() => setSelectedType("expense")}
                                 className="w-5 h-5 text-red-500 focus:ring-red-500" />
                               <span className="text-red-500 font-medium">Expense</span>
                             </Label>
@@ -425,31 +433,34 @@ const TransactionCard = () => {
                         </fieldset>
                         <div>
                           <Label className="block mb-2 text-sm font-medium">Category</Label>
-                          <Select defaultValue={data.category} onValueChange={(value) => setCategory(value)}>
+                          <Select
+                            value={shadCategory || data.category}
+                            onValueChange={(value) => setCategory(value)}>
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select your category" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Income</SelectLabel>
-                                <SelectItem value="salary">Salary</SelectItem>
-                                <SelectItem value="scholarship">Scholarship</SelectItem>
-                                <SelectItem value="commission">Commission</SelectItem>
-                              </SelectGroup>
-
-                              <SelectGroup>
-                                <SelectLabel>Expenses</SelectLabel>
-                                <SelectItem value="rent">Rent</SelectItem>
-                                <SelectItem value="utilities">Utilities</SelectItem>
-                                <SelectItem value="groceries">Groceries</SelectItem>
-                                <SelectItem value="food">Food</SelectItem>
-                                <SelectItem value="transport">Transport</SelectItem>
-                                <SelectItem value="health">Health</SelectItem>
-                                <SelectItem value="entertainment">Entertainment</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectGroup>
+                              {selectedType === "income" ?
+                                <SelectGroup>
+                                  <SelectLabel>Income</SelectLabel>
+                                  <SelectItem value="salary">Salary</SelectItem>
+                                  <SelectItem value="scholarship">Scholarship</SelectItem>
+                                  <SelectItem value="commission">Commission</SelectItem>
+                                </SelectGroup>
+                                :
+                                <SelectGroup>
+                                  <SelectLabel>Expenses</SelectLabel>
+                                  <SelectItem value="rent">Rent</SelectItem>
+                                  <SelectItem value="utilities">Utilities</SelectItem>
+                                  <SelectItem value="groceries">Groceries</SelectItem>
+                                  <SelectItem value="food">Food</SelectItem>
+                                  <SelectItem value="transport">Transport</SelectItem>
+                                  <SelectItem value="health">Health</SelectItem>
+                                  <SelectItem value="entertainment">Entertainment</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectGroup>
+                              }
                             </SelectContent>
-
                           </Select>
                         </div>
                         <div>
@@ -462,8 +473,7 @@ const TransactionCard = () => {
                             name="amount"
                             defaultValue={data.amount}
                             step="0.01"
-                            required
-                            className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            required />
                         </div>
                         <div>
                           <Label htmlFor="description" className="block mb-2 text-sm font-medium">
@@ -474,7 +484,6 @@ const TransactionCard = () => {
                             name="description"
                             rows="3"
                             defaultValue={data.description}
-                            placeholder="e.g., Grocery shopping"
                             className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         </div>
                         <div>
@@ -485,14 +494,13 @@ const TransactionCard = () => {
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
-                                data-empty={!shadDate}
-                                className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal">
+                                className="w-full justify-start text-left font-normal">
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {shadDate ? (
-                                  format(shadDate, "yyyy-MM-dd")
-                                ) : (
-                                  <span>{data.date ? data.date.split("T")[0] : "Pick a date"}</span>
-                                )}
+                                {shadDate
+                                  ? format(shadDate, "yyyy-MM-dd")
+                                  : data.date
+                                    ? data.date.split("T")[0]
+                                    : "Pick a date"}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
@@ -500,11 +508,9 @@ const TransactionCard = () => {
                                 mode="single"
                                 selected={shadDate}
                                 onSelect={setDate}
-                                initialFocus
-                              />
+                                initialFocus />
                             </PopoverContent>
                           </Popover>
-                          <Input type="hidden" name="date" value={shadDate ? format(shadDate, "yyyy-MM-dd") : data.date?.split("T")[0]} />
                         </div>
                         <DialogFooter>
                           <DialogClose asChild>
@@ -564,7 +570,6 @@ const TransactionCard = () => {
                           Full information about this transaction.
                         </DialogDescription>
                       </DialogHeader>
-
                       <div className="mt-4 grid gap-4 text-sm">
                         <div className="flex justify-between">
                           <span className="font-medium">Type:</span>
