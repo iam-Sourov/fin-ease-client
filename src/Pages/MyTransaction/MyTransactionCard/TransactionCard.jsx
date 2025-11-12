@@ -42,12 +42,6 @@ const TransactionCard = () => {
   const [shadCategory, setCategory] = useState('');
   const [selectedType, setSelectedType] = useState('');
 
-  console.log(shadDate, shadCategory, selectedType);
-
-
-
-
-
   const [transactions, setTransactions] = useState([]);
   const handleRemove = async (id) => {
     try {
@@ -380,11 +374,13 @@ const TransactionCard = () => {
                             description: form.description.value,
                             date: shadDate ? format(shadDate, "yyyy-MM-dd") : data.date?.split("T")[0],
                           };
+
                           try {
                             const res = await axios.put(
                               `https://fine-ease-server.vercel.app/transactions/update/${data._id}`,
                               updatedTransaction
                             );
+
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
                               const updatedList = transactions.map((item) =>
