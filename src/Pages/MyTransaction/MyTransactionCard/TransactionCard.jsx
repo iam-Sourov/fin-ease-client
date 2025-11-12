@@ -43,10 +43,6 @@ const TransactionCard = () => {
   console.log(shadCategory);
 
   const [transactions, setTransactions] = useState([]);
-
-
-
-
   const handleRemove = async (id) => {
     try {
       await axios.delete(`https://fine-ease-server.vercel.app/transaction/delete/${id}`);
@@ -330,7 +326,7 @@ const TransactionCard = () => {
                 <div className='flex justify-start gap-2 items-center'>
                   <span className="font-semibold">Type:</span>{" "}
                   <span
-                    className={`${data.type === "income" ? "text-green-600 font-semibold bg-white border-2 border-dotted border-green-600 px-2 py-1 rounded-md" : "text-red-600 font-semibold bg-white border-2 border-dotted border-red-600 px-2 py-1 rounded-md"
+                    className={`${data.type === "income" ? "text-green-700 font-semibold bg-white border-2 border-dotted border-green-700 px-2 py-1 rounded-md" : "text-red-700 font-semibold bg-white border-2 border-dotted border-red-700 px-2 py-1 rounded-md"
                       } font-semibold `}>
                     {data.type}
                   </span>
@@ -362,7 +358,7 @@ const TransactionCard = () => {
                           e.preventDefault();
                           const form = e.target;
                           const type = form.transactionType.value;
-                          const category = form.category.value;
+                          const category = shadCategory;
                           const amount = parseFloat(form.amount.value);
                           const description = form.description.value;
 
@@ -407,7 +403,7 @@ const TransactionCard = () => {
                             Transaction Type
                           </legend>
                           <div className="flex items-center gap-6">
-                            <label className="flex items-center space-x-2 cursor-pointer">
+                            <Label className="flex items-center space-x-2 cursor-pointer">
                               <Input
                                 type="radio"
                                 name="transactionType"
@@ -415,8 +411,8 @@ const TransactionCard = () => {
                                 defaultChecked={data.type === "income"}
                                 className="w-5 h-5 text-green-500 focus:ring-green-500" />
                               <span className="text-green-500 font-medium">Income</span>
-                            </label>
-                            <label className="flex items-center space-x-2 cursor-pointer">
+                            </Label>
+                            <Label className="flex items-center space-x-2 cursor-pointer">
                               <Input
                                 type="radio"
                                 name="transactionType"
@@ -424,11 +420,11 @@ const TransactionCard = () => {
                                 defaultChecked={data.type === "expense"}
                                 className="w-5 h-5 text-red-500 focus:ring-red-500" />
                               <span className="text-red-500 font-medium">Expense</span>
-                            </label>
+                            </Label>
                           </div>
                         </fieldset>
                         <div>
-                          <label className="block mb-2 text-sm font-medium">Category</label>
+                          <Label className="block mb-2 text-sm font-medium">Category</Label>
                           <Select defaultValue={data.category} onValueChange={(value) => setCategory(value)}>
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Select your category" />
@@ -457,9 +453,9 @@ const TransactionCard = () => {
                           </Select>
                         </div>
                         <div>
-                          <label htmlFor="amount" className="block mb-2 text-sm font-medium">
+                          <Label htmlFor="amount" className="block mb-2 text-sm font-medium">
                             Amount
-                          </label>
+                          </Label>
                           <Input
                             type="number"
                             id="amount"
@@ -470,9 +466,9 @@ const TransactionCard = () => {
                             className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         </div>
                         <div>
-                          <label htmlFor="description" className="block mb-2 text-sm font-medium">
+                          <Label htmlFor="description" className="block mb-2 text-sm font-medium">
                             Description
-                          </label>
+                          </Label>
                           <textarea
                             id="description"
                             name="description"
@@ -482,9 +478,9 @@ const TransactionCard = () => {
                             className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         </div>
                         <div>
-                          <label htmlFor="date" className="block mb-2 text-sm font-medium">
+                          <Label htmlFor="date" className="block mb-2 text-sm font-medium">
                             Date
-                          </label>
+                          </Label>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button

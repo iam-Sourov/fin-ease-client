@@ -29,12 +29,11 @@ const Navbar = () => {
         LogOut()
             .then(() => {
                 setUser(null);
-                toast.success('Signed out successfully');
                 setOpen(false);
             })
-            .catch((error) => {
-                console.error(error);
-                toast.error('Failed to sign out');
+            .catch((err) => {
+                console.error(err);
+                toast.error('Failed to sign out',err.message);
             });
     };
 

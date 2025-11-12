@@ -20,8 +20,8 @@ import { auth } from "../../Firebase/firebase.config";
 
 const MyProfile = () => {
   const { user, setUser, updateUser } = useContext(AuthContext);
+  console.log(user);
 
-  
   const navigate = useNavigate()
 
   const [userData, setUserData] = useState([]);
