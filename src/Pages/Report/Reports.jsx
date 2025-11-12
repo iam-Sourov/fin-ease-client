@@ -15,7 +15,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 import toast from "react-hot-toast";
 
 const Reports = () => {
-  const { user, loading, setLoading } = useContext(AuthContext);
+  const { user,  setLoading } = useContext(AuthContext);
   const [transactions, setTransactions] = useState([]);
   const [monthFilter, setMonthFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
