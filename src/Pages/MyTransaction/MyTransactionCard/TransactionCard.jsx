@@ -1,14 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Pencil, Trash2, Eye } from "lucide-react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import sim from '../../../assets/sim.svg'
+import { AuthContext } from '../../../Contexts/AuthContext';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   ButtonGroup,
-  ButtonGroupSeparator,
-  ButtonGroupText,
+
 } from "@/components/ui/button-group"
 import {
   Dialog,
@@ -21,12 +35,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import { AuthContext } from '../../../Contexts/AuthContext';
-import toast from 'react-hot-toast';
-
 
 const TransactionCard = () => {
   const { user, setLoading } = useContext(AuthContext);
+  const [shadDate, setDate] = useState()
   const [transactions, setTransactions] = useState([]);
 
 
@@ -289,21 +301,17 @@ const TransactionCard = () => {
             </tbody>
           </table>
         </div> */}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-3 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
           {
             transactions.map(data => <div
               key={data._id}
-              className={`w-98 h-auto p-6 ${data.type === 'income' ? "bg-linear-to-br from-green-600/20 to-green-800/20" : "bg-linear-to-br from-red-600/20 to-red-800/20"} rounded-2xl shadow-lg  flex flex-col transform transition-all hover:scale-105`}>
+              className={`w-full p-6 ${data.type === 'income'
+                ? "bg-linear-to-br from-green-500/20 to-green-800/20"
+                : "bg-linear-to-br from-red-500/20 to-red-800/20"
+                } rounded-2xl shadow-lg flex flex-col justify-between transition-transform duration-300 hover:scale-[1.02]`}>
               <div className="flex justify-between items-start mb-4" >
                 <div className="w-12 h-9  shadow-inner flex items-center justify-center">
                   <img src={sim} alt="" />
-                  {/* <div className="w-9 h-6 border-4 border-dotted border-yellow-400 bg-gray-600 rounded-md flex items-center justify-center">
-                    <div className="w-8 h-5 border-4  border-yellow-400 bg-gray-600 rounded-xl flex items-center justify-center">
-                      <div className="w-7 h-4 border-2 border-dotted border-yellow-400 bg-gray-600 rounded">
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
                 {data.type === 'income' ? <svg className="w-10 h-10 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> : <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>}
               </div>
@@ -335,9 +343,7 @@ const TransactionCard = () => {
                   <span className="font-semibold">Description:</span> {data.description}
                 </div>
               </div>
-              {/* button */}
               <div className='grid place-content-center mt-4'>
-
                 <ButtonGroup>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -345,30 +351,36 @@ const TransactionCard = () => {
                         <Pencil size={16} className="mr-1" /> Update
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[450px]">
+                    <DialogContent className="sm:max-w-[500px]">
                       <form
                         onSubmit={async (e) => {
                           e.preventDefault();
                           const form = e.target;
-                          const type = form.type.value;
-                          const description = form.description.value;
+                          const type = form.transactionType.value;
                           const category = form.category.value;
                           const amount = parseFloat(form.amount.value);
-                          const date = form.date.value;
+                          const description = form.description.value;
+
+                          const dateValue = shadDate
+                            ? format(shadDate, "yyyy-MM-dd")
+                            : data.date?.split("T")[0];
                           const updatedTransaction = {
-                            type: type,
-                            description: description,
-                            category: category,
-                            amount: amount,
-                            date: date
+                            type,
+                            category,
+                            amount,
+                            description,
+                            date: dateValue,
                           };
                           try {
                             const res = await axios.put(
-                              `https://fine-ease-server.vercel.app/transactions/update/${data._id}`, updatedTransaction);
+                              `https://fine-ease-server.vercel.app/transactions/update/${data._id}`,
+                              updatedTransaction
+                            );
                             if (res.data.modifiedCount > 0) {
                               toast.success("Transaction updated successfully!");
-                              const updatedList = transactions.map(item =>
-                                item._id === data._id ? { ...item, ...updatedTransaction } : item);
+                              const updatedList = transactions.map((item) =>
+                                item._id === data._id ? { ...item, ...updatedTransaction } : item
+                              );
                               setTransactions(updatedList);
                             } else {
                               toast("No changes made.");
@@ -377,52 +389,110 @@ const TransactionCard = () => {
                             console.error(err);
                             toast.error("Error updating transaction.");
                           }
-                        }}>
+                        }}
+                        className="space-y-6">
                         <DialogHeader>
                           <DialogTitle>Update Transaction</DialogTitle>
                           <DialogDescription>
-                            Edit the transaction details below. Click save when you're done.
+                            Modify your transaction details below.
                           </DialogDescription>
                         </DialogHeader>
-                        <div className="grid gap-4 py-2">
-                          <div className="grid gap-2">
-                            <Label htmlFor="type">Type</Label>
-                            <Input id="type" name="type" defaultValue={data.type} required />
+                        <fieldset>
+                          <legend className="block mb-2 text-sm font-medium">
+                            Transaction Type
+                          </legend>
+                          <div className="flex items-center gap-6">
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <Input
+                                type="radio"
+                                name="transactionType"
+                                value="income"
+                                defaultChecked={data.type === "income"}
+                                className="w-5 h-5 text-green-500 focus:ring-green-500" />
+                              <span className="text-green-500 font-medium">Income</span>
+                            </label>
+                            <label className="flex items-center space-x-2 cursor-pointer">
+                              <Input
+                                type="radio"
+                                name="transactionType"
+                                value="expense"
+                                defaultChecked={data.type === "expense"}
+                                className="w-5 h-5 text-red-500 focus:ring-red-500" />
+                              <span className="text-red-500 font-medium">Expense</span>
+                            </label>
                           </div>
-                          <div className="grid gap-2">
-                            <Label htmlFor="description">Description</Label>
-                            <Input
-                              id="description"
-                              name="description"
-                              defaultValue={data.description}
-                              required />
-                          </div>
-                          <div className="grid gap-2">
-                            <Label htmlFor="category">Category</Label>
-                            <Input
-                              id="category"
-                              name="category"
-                              defaultValue={data.category}
-                              required />
-                          </div>
-                          <div className="grid gap-2">
-                            <Label htmlFor="amount">Amount</Label>
-                            <Input
-                              id="amount"
-                              name="amount"
-                              type="number"
-                              defaultValue={data.amount}
-                              required />
-                          </div>
-                          <div className="grid gap-2">
-                            <Label htmlFor="date">Date</Label>
-                            <Input
-                              id="date"
-                              name="date"
-                              type="date"
-                              defaultValue={data.date?.split("T")[0]}
-                              required />
-                          </div>
+                        </fieldset>
+                        <div>
+                          <label className="block mb-2 text-sm font-medium">Category</label>
+                          <Select defaultValue={data.category} name="category">
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select your category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectItem value="salary">Salary</SelectItem>
+                                <SelectItem value="groceries">Groceries</SelectItem>
+                                <SelectItem value="utilities">Utilities</SelectItem>
+                                <SelectItem value="rent">Rent</SelectItem>
+                                <SelectItem value="entertainment">Entertainment</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label htmlFor="amount" className="block mb-2 text-sm font-medium">
+                            Amount
+                          </label>
+                          <Input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            defaultValue={data.amount}
+                            step="0.01"
+                            required
+                            className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <div>
+                          <label htmlFor="description" className="block mb-2 text-sm font-medium">
+                            Description
+                          </label>
+                          <textarea
+                            id="description"
+                            name="description"
+                            rows="3"
+                            defaultValue={data.description}
+                            placeholder="e.g., Grocery shopping"
+                            className="w-full p-3 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <div>
+                          <label htmlFor="date" className="block mb-2 text-sm font-medium">
+                            Date
+                          </label>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                data-empty={!shadDate}
+                                className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal">
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {shadDate ? (
+                                  format(shadDate, "yyyy-MM-dd")
+                                ) : (
+                                  <span>{data.date ? data.date.split("T")[0] : "Pick a date"}</span>
+                                )}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={shadDate}
+                                onSelect={setDate}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <Input type="hidden" name="date" value={shadDate ? format(shadDate, "yyyy-MM-dd") : data.date?.split("T")[0]} />
                         </div>
                         <DialogFooter>
                           <DialogClose asChild>
@@ -431,8 +501,10 @@ const TransactionCard = () => {
                             </Button>
                           </DialogClose>
                           <DialogClose asChild>
-                            <Button type="submit" className="bg-blue-600 text-white hover:bg-blue-700">
-                              Save changes
+                            <Button
+                              type="submit"
+                              className="bg-blue-600 text-white hover:bg-blue-700 w-full md:w-auto">
+                              Save Changes
                             </Button>
                           </DialogClose>
                         </DialogFooter>
@@ -471,7 +543,6 @@ const TransactionCard = () => {
                         <Eye size={16} className="mr-1" /> Details
                       </Button>
                     </DialogTrigger>
-
                     <DialogContent className="sm:max-w-[450px]">
                       <DialogHeader>
                         <DialogTitle className="text-lg font-semibold">
